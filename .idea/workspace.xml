@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5c6531de-15d2-47e4-b99e-ac60bd909164" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="24fd1220-7e8f-4cc4-a2fa-b46b86c36314" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/MacChanger/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MacChanger/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,12 +13,12 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app2.py">
+        <entry file="file://$PROJECT_DIR$/AğTarayıcısı/arp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="411">
+              <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
               <folding>
-                <element signature="e#0#17#0" expanded="true" />
+                <element signature="e#84#109#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -35,22 +34,29 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app.py" />
-        <option value="$PROJECT_DIR$/app2.py" />
+        <option value="$PROJECT_DIR$/MacChanger/app.v2.py" />
+        <option value="$PROJECT_DIR$/AğTarayıcısı/app.py" />
+        <option value="$PROJECT_DIR$/AğTarayıcısı/arp.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="515" />
-    <option name="width" value="859" />
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="508" />
+    <option name="width" value="866" />
     <option name="height" value="744" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -60,8 +66,13 @@
         <subPane>
           <expand>
             <path>
-              <item name="MacChanger" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MacChanger" type="462c0819:PsiDirectoryNode" />
+              <item name="CyberSecurity-Python" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CyberSecurity-Python" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CyberSecurity-Python" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CyberSecurity-Python" type="462c0819:PsiDirectoryNode" />
+              <item name="AğTarayıcısı" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -71,8 +82,8 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -93,20 +104,21 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5c6531de-15d2-47e4-b99e-ac60bd909164" name="Default Changelist" comment="" />
-      <created>1562229469280</created>
+      <changelist id="24fd1220-7e8f-4cc4-a2fa-b46b86c36314" name="Default Changelist" comment="" />
+      <created>1562308022231</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1562229469280</updated>
-      <workItem from="1562229470607" duration="4382000" />
+      <updated>1562308022231</updated>
+      <workItem from="1562308031638" duration="4325000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4382000" />
+    <option name="totallyTimeSpent" value="4325000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="515" y="0" width="859" height="744" extended-state="0" />
+    <frame x="508" y="0" width="866" height="744" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -128,29 +140,29 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
-      <window_info active="true" anchor="right" content_ui="combo" id="Project" order="5" visible="true" weight="0.18898623" />
+      <window_info active="true" anchor="right" content_ui="combo" id="Project" order="5" visible="true" weight="0.24317618" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app.py">
+    <entry file="file://$PROJECT_DIR$/MacChanger/app.v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" lean-forward="true" selection-end-line="20" />
+        <state relative-caret-position="440">
+          <caret line="34" column="54" lean-forward="true" selection-start-line="34" selection-start-column="54" selection-end-line="34" selection-end-column="54" />
           <folding>
-            <element signature="e#0#60#0" expanded="true" />
+            <element signature="e#0#17#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app2.py">
+    <entry file="file://$PROJECT_DIR$/AğTarayıcısı/arp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="411">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
           <folding>
-            <element signature="e#0#17#0" expanded="true" />
+            <element signature="e#84#109#0" expanded="true" />
           </folding>
         </state>
       </provider>
