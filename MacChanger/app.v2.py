@@ -17,7 +17,7 @@ def change_mac_address(user_interface, user_mac_address):
                      "down"])
     subprocess.call(["ifconfig", user_interface, "hw", "ether", user_mac_address])
     subprocess.call(["ifconfig", user_interface, "up"])
-    
+
 
 
 def control_new_mac(interface):
