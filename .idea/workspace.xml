@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="24fd1220-7e8f-4cc4-a2fa-b46b86c36314" name="Default Changelist" comment="" />
+    <list default="true" id="24fd1220-7e8f-4cc4-a2fa-b46b86c36314" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaketDinleyici/pl.py" beforeDir="false" afterPath="$PROJECT_DIR$/PaketDinleyici/pl.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,12 +17,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/PaketDinleyici/pl.py">
+        <entry file="file://$PROJECT_DIR$/Keylogger/keylogger.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="59" lean-forward="true" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
+            <state relative-caret-position="697">
+              <caret line="41" selection-start-line="41" selection-end-line="41" />
               <folding>
-                <element signature="e#0#25#0" expanded="true" />
+                <element signature="e#0#65#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -44,14 +47,19 @@
         <option value="$PROJECT_DIR$/AğTarayıcısı/arp.py" />
         <option value="$PROJECT_DIR$/MacChanger/app.v2.py" />
         <option value="$PROJECT_DIR$/OrtadakiAdam/mitm.py" />
+        <option value="$PROJECT_DIR$/../deneme.py" />
         <option value="$PROJECT_DIR$/PaketDinleyici/pl.py" />
+        <option value="$PROJECT_DIR$/Keylogger/keylogger.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="497" />
     <option name="width" value="877" />
     <option name="height" value="744" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -66,6 +74,11 @@
               <item name="CyberSecurity-Python" type="b2602c69:ProjectViewProjectNode" />
               <item name="CyberSecurity-Python" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="CyberSecurity-Python" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CyberSecurity-Python" type="462c0819:PsiDirectoryNode" />
+              <item name="Keylogger" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -75,7 +88,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../deneme.py" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -103,14 +116,16 @@
       <updated>1562308022231</updated>
       <workItem from="1562308031638" duration="6571000" />
       <workItem from="1562325874671" duration="4402000" />
+      <workItem from="1562333793235" duration="932000" />
+      <workItem from="1562425133752" duration="3307000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10973000" />
+    <option name="totallyTimeSpent" value="15212000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="497" y="0" width="877" height="744" extended-state="0" />
+    <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" weight="0.32925338" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -132,7 +147,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
-      <window_info active="true" anchor="right" content_ui="combo" id="Project" order="5" visible="true" weight="0.16034272" />
+      <window_info active="true" anchor="right" content_ui="combo" id="Project" order="5" visible="true" weight="0.27305245" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,12 +185,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../deneme.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/PaketDinleyici/pl.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="59" lean-forward="true" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
+        <state relative-caret-position="153">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Keylogger/keylogger.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
           </folding>
         </state>
       </provider>
