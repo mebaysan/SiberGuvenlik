@@ -1,5 +1,5 @@
-import scapy.all as scapy
-from scapy_http import http
+import scapy.all as scapy # bu paketi (scapy) indrmeliyzi pip ile
+from scapy_http import http # bu paketi (scapy_http) indrmeliyzi pip ile
 import optparse
 
 parser = optparse.OptionParser()
