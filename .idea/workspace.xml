@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="24fd1220-7e8f-4cc4-a2fa-b46b86c36314" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaketDinleyici/pl.py" beforeDir="false" afterPath="$PROJECT_DIR$/PaketDinleyici/pl.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,12 +16,24 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Keylogger/keylogger.py">
+        <entry file="file://$PROJECT_DIR$/ArkaKapi/back_door.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="41" selection-start-line="41" selection-end-line="41" />
+            <state relative-caret-position="459">
+              <caret line="27" column="24" lean-forward="true" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
               <folding>
-                <element signature="e#0#65#0" expanded="true" />
+                <element signature="e#177#190#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ArkaKapi/back_door_listener.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -50,6 +61,9 @@
         <option value="$PROJECT_DIR$/../deneme.py" />
         <option value="$PROJECT_DIR$/PaketDinleyici/pl.py" />
         <option value="$PROJECT_DIR$/Keylogger/keylogger.py" />
+        <option value="$PROJECT_DIR$/ArkaKapi/bd.py" />
+        <option value="$PROJECT_DIR$/ArkaKapi/back_door.py" />
+        <option value="$PROJECT_DIR$/ArkaKapi/back_door_listener.py" />
       </list>
     </option>
   </component>
@@ -66,7 +80,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -77,12 +90,13 @@
             <path>
               <item name="CyberSecurity-Python" type="b2602c69:ProjectViewProjectNode" />
               <item name="CyberSecurity-Python" type="462c0819:PsiDirectoryNode" />
-              <item name="Keylogger" type="462c0819:PsiDirectoryNode" />
+              <item name="ArkaKapi" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -118,14 +132,17 @@
       <workItem from="1562325874671" duration="4402000" />
       <workItem from="1562333793235" duration="932000" />
       <workItem from="1562425133752" duration="3307000" />
+      <workItem from="1562444846645" duration="804000" />
+      <workItem from="1562479621955" duration="5383000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15212000" />
+    <option name="totallyTimeSpent" value="21399000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" weight="0.32925338" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -147,11 +164,22 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
-      <window_info active="true" anchor="right" content_ui="combo" id="Project" order="5" visible="true" weight="0.27305245" />
+      <window_info active="true" anchor="right" content_ui="combo" id="Project" order="5" visible="true" weight="0.27782193" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ArkaKapi/back_door_listener.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/MacChanger/app.v2.py">
@@ -185,13 +213,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../deneme.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="52" selection-start-line="52" selection-end-line="52" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../deneme.py" />
     <entry file="file://$PROJECT_DIR$/PaketDinleyici/pl.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -208,6 +230,26 @@
           <caret line="41" selection-start-line="41" selection-end-line="41" />
           <folding>
             <element signature="e#0#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ArkaKapi/back_door_listener.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ArkaKapi/back_door.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="24" lean-forward="true" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
+          <folding>
+            <element signature="e#177#190#0" expanded="true" />
           </folding>
         </state>
       </provider>
