@@ -18,7 +18,7 @@ leafpad /etc/dhcp/dhclient.conf -> konfigürasyon dosyasını açıyoruz
 prepend domain-name-servers adlı satırın önünden kare işaretini kaldırıyoruz ve sounundaki adresi siliyoruz burası localhosttur.
 internetten aldığımız free dns veya dnsleri satıra ekliyoruz.
 
-service network-manager -> network servisini baştan başlatır.
+service network-manager restart -> network servisini baştan başlatır.
 cat /etc/resolv.conf yaparak yeni dnsleri görürüz.
 
 
