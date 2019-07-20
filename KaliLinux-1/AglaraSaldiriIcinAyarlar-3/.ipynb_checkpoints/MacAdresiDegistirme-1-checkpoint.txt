@@ -1,0 +1,8 @@
+    Mac (Media Access Control) adresi nedir?
+her wireless kartın mac adresi vardır. ifconfig yapınca gözüken ether bizim mac adresimizdir.
+
+    Mac Adresş Nasıl Değiştirilir!
+ifconfig wlan0(veya eth0) down -> bağlantıyı kapatıyoruz
+maccahnger --help -> macchanger tool için yardım menüsü
+maccahnger --random eth0 -> eth0 için random bir mac adresi atadık
+ifconfig eth0(veya wlan0) up -> internet eth0 servisimizi tekrar başlattık
