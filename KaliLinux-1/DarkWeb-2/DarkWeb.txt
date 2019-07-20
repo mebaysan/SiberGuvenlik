@@ -1,0 +1,11 @@
+bir yandan vpn'imiz çalışıyor çünkü bunun sebebi bulunduğumuz ülkede tor browser yasaklı olabilir.
+
+apt-get install tor -y -> tor browser paketini kuruyoruz.
+torbrowser sitesine gidip download ediyoruz ve rar içerisinden çıkartıyoruz
+ve yükleme yapıyoruz.
+Eğer root hatası alırsak;
+browser klasörü içerisine gir ve start tor-browser dosyasını notepad ile aç ve;
+ if {* id -u* -eq 0}; then
+     complain The Tor Browser bundle .... diye olan kod bloğunu(4staır) hashle(#)
+
+Bu şekilde yüklemiş olduk ve başarıyla gezinebilirsiniz.
