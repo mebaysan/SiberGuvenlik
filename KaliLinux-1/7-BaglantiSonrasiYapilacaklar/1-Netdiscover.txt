@@ -1,0 +1,5 @@
+Ağa bağlantı sağladıktan sonra kurbanımızın ip adresine ihtiyacımız var.
+Ağı keşfeder ve o ağa bağlı cihazların özelliklerini listeler.
+
+netdiscover -i <interface> -r <range(hangi aralıkta)> 
+Örnek : netdiscover -i wlan0 -r 192.168.1.0/24 -> wlan0 interface ve bu ip'de 24'e kadar olan
