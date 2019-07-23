@@ -1,0 +1,4 @@
+Zenmap nmap'i kullanmaya yarayan bir arayüzdür.
+terminal-> zenmap
+target yerine ip adresi ve range'i yazıyoruz.
+quick scan plus (profile) ayrıntılı bilgi verir.
