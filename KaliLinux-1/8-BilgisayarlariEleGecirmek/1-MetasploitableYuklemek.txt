@@ -1,7 +1,7 @@
 Metasploitable'i indiriyoruz.
 
-kullanıcı adı : mfsadmin
-şifre :		mfsadmin
+kullanıcı adı : msfadmin
+şifre :		msfadmin
 
 Kurulum:
 Virtualbox -> New
