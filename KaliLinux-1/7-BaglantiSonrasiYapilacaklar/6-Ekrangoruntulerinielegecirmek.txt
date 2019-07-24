@@ -5,3 +5,7 @@ mitm saldırısı yapıyoruz ve bu sayede --screen diyerek ekran görüntüsü a
 Eğer hata alıyorsak
 pip install Twisted==15.5.0 -> gerekli paketi yükler. şu anda mitmf ile twisted uyumlu çalışmıyor bu sebeple
 pip3 install Twisted==15.5.0
+
+Alınan ekran görüntüleri;
+files -> other locations -> var -> log -> mitmf
+Burası içerisinde kayıt edilmiş loglar vardır
