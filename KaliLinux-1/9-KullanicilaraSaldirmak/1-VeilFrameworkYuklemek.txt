@@ -1,0 +1,11 @@
+google'da aratabiliriz. Veil framework download.
+
+https://github.com/Veil-Framework
+
+yüklemeyi yapacağımız dizine gidiyoruz ve git clone https://github.com/Veil-Framework/Veil.git diyerek projeyi cloneluyoruz.
+cd Veil
+./config/setup.sh --force --silent
+
+kurlumu yapar, zaten github'da kendi reposunda da nasıl kurulacağı gösterilmiştir.
+
+sonrasında python veil.py ile programı açabiliriz.
