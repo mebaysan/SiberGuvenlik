@@ -1,0 +1,13 @@
+Metasploitable'i indiriyoruz.
+
+kullanıcı adı : mfsadmin
+şifre :		mfsadmin
+
+Kurulum:
+Virtualbox -> New
+Tipi linux seçiyoruz
+Using an existing virtual hard disk'i seçiyoruz. ve indirdiğimiz dosya içerisindeki vmdt adlı dosyayı seçiyoruz ve create'e basıyoruz. Metasploitable bizim için yüklenmiş olacak.
+
+
+Metasploitable nedir?
+Tamamen hacklenmek için oluşturulmuş bir sistemdir.
