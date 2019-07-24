@@ -1,0 +1,3 @@
+eğer windows kullanıcısıysanız arp tablolarına bakarak anlayabilirsiniz.
+arp -a  --> arp tablolarını gösterir
+Eğer modemin mac adresi başka herhangi bir ip'de mevcut ise saldırı altındasınızdır.
