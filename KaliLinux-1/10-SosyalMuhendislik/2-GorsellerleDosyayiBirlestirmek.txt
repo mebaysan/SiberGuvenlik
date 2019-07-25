@@ -1,0 +1,12 @@
+https://github.com/r00t-3xp10it/FakeImageExploiter.git bu repo işimizi görecektir.
+
+git clone https://github.com/r00t-3xp10it/FakeImageExploiter.git
+
+dosya içerisindeki settings dosyasını kendinize göre düzenleyebilirsiniz.
+
+
+
+Dosya uzantısı değiştirmek:
+
+kali içindeki characters uygulamasını aç.
+ right to left override bölümünü aç
