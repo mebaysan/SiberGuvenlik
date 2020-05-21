@@ -1,9 +1,0 @@
-Handshake yakalamamız lazım.
-2 seçenek var ya bekleyeceğiz ki birisi ağa tekrar başlansın. Ya da deauth(yetkisizlendirme) saldırısı yapıp ağdan düşüreceğiz ve
-tekrardan ağa bağlanmasını sağlayacağız. ufak paket sayısı ile hemen ağdan düşürüp geri getirebiliriz.
-ve aireplay ile deauth yaparken hemen sağ üstte WPA handshake yazısı gelecek. ve bu handshake airodump ile ağı izlerken yazdıüımız dosya içerisine kaydedilir.
-
-CRUNCH framework (Wordlist oluşturmaya yarar)
-crunch <min> <max> <char> -t <pattern> -o file
-
-aircrack-ng handshake_yakalanan_dosya.cap -w wordlist_dosyasi

