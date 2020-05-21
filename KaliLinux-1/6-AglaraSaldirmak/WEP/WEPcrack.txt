@@ -1,3 +1,0 @@
-airodump-ng --channel <ch> --bssid <id> --write <file_name> <interface> -> hedef ağ ile ilgili bilgi topluyoruz
-aircrack-ng <file_name> -> topladığımız bilgileri yazdığımız dosyadan şifreyi çıkarıyoruz
-örnek : aircrack-ng deneme.cap

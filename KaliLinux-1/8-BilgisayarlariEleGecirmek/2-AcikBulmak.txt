@@ -1,1 +1,0 @@
-zenmap'i açıyoruz. ve hedefimizin ip'sini Intense scan ile arıyoruz. Bize detaylı bilgi verecektir.

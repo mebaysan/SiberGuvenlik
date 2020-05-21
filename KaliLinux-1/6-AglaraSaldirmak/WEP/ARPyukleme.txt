@@ -1,3 +1,0 @@
-aireplay-ng --arpreplay -b <target_mac> -h <kali_kendi_mac> <interface>
-
-paket yüklemesi yapar. öncelikle kendimizi yetkilendirmemiz gerek.
