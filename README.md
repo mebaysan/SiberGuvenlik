@@ -12,12 +12,18 @@
     - [Paketler](#paketler)
     - [Veri İletişimi (Data Transmission)](#veri-%c4%b0leti%c5%9fimi-data-transmission)
     - [Ağ Protokolü Nedir?](#a%c4%9f-protokol%c3%bc-nedir)
+    - [TCP/IP](#tcpip)
+      - [TCP/IP Katmanlarında Kullanılan Bazı Protokoller](#tcpip-katmanlar%c4%b1nda-kullan%c4%b1lan-baz%c4%b1-protokoller)
+    - [OSI (Open Systems Interconnection) Referans Modeli](#osi-open-systems-interconnection-referans-modeli)
+      - [OSI Referans Modelindeki 7 Katman](#osi-referans-modelindeki-7-katman)
     - [MAC Adresi](#mac-adresi)
     - [ISP](#isp)
     - [IP](#ip)
     - [DNS (Domain Name Server)](#dns-domain-name-server)
-    - [Arp (Address Resolution Protocol)](#arp-address-resolution-protocol)
+    - [ARP (Address Resolution Protocol)](#arp-address-resolution-protocol)
     - [VPN (Virtual Private Network)](#vpn-virtual-private-network)
+    - [Firewall (Güvenlik Duvarı)](#firewall-g%c3%bcvenlik-duvar%c4%b1)
+      - [UFW (Uncomplicated Firewall)](#ufw-uncomplicated-firewall)
   - [Cihazların İletişime Başlaması](#cihazlar%c4%b1n-%c4%b0leti%c5%9fime-ba%c5%9flamas%c4%b1)
     - [Handshake (3-Way Handshake)](#handshake-3-way-handshake)
     - [Syn Paketi](#syn-paketi)
@@ -37,6 +43,7 @@
     - [Ağları İncelemek (Sniffing)](#a%c4%9flar%c4%b1-%c4%b0ncelemek-sniffing)
     - [Belirli Bir Ağa Özel Bilgi Edinmek](#belirli-bir-a%c4%9fa-%c3%96zel-bilgi-edinmek)
     - [Deauth Saldırısı](#deauth-sald%c4%b1r%c4%b1s%c4%b1)
+  - [Ağlara Saldırmak](#a%c4%9flara-sald%c4%b1rmak-1)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -90,7 +97,71 @@ Bir ağı oluşturan hostların (sunucu) ve uç sistemlerin aralarında yapmış
 
 ![1-data-transmission](./assets/1-data-transmission.jpg)
 ### Ağ Protokolü Nedir?
-Farklı ağ ortamları arasında iletişimin sağlanmasında, adreslemenin yapılmasında, hata kontrolünün yapılmasında ve olası hata durumunda paketlerin yeniden gönderilmesinde sorumlu olan protokollerin tamamıdır.
+Farklı ağ ortamları arasında iletişimin sağlanmasında, adreslemenin yapılmasında, hata kontrolünün yapılmasında ve olası hata durumunda paketlerin yeniden gönderilmesinde sorumlu olan protokollerin tamamıdır. Veri iletim aşamalarının tamamını denetleyen kurallar bütünüdür.
+### TCP/IP
+**TCP** ve **IP** her ne kadar birlikte kullanılsalar da aslında **iki farklı ağ protokolüdür**. Popüler olmaları ve geniş kabul görmeleri nedeniyle, ağa bağlı cihazların işletim sistemlerinde kurulmuştur. TCP/IP 4 katmandan oluşur. <br>
+IP protokolü network; yani Layer 2'de (2. katman) çalışırken; TCP protokolü taşıma yani Layer 3'te (3. katman) çalışır. <br>
+Aşağıdaki şemadan hangi katmanda hangi protokollerin çalıştığını görebilirisiniz.
+- Application Layer (Uygulama Katmanı)
+  - En üst katmandır.Bu katmanda sender'dan receiver'a gidecek veriyi göndermek için uygulamalara ihtiyaç duyulur. Veri göndermek istenen uygulama ve kullandığı dosya biçimi tespit edilerek gönderilen verinin türüne göre farklı protokoller çalıştırılır (HTTP, FTP vb.). 
+- Transport Layer (Taşıma Katmanı)
+  - Verinin sender'dan receiver'a ne şekilde gönderildiğinin belirlendiği/görüldüğü katmandır. Aynı zamanda flow control (veri akış kontrolü), error control (hata kontrolü) vb. işlemlerin de yapıldığı katman olarak bilinir.
+  - TCP (Transmission Control Protocol)
+    - İhtiyacımız olan **hatasız ve sıralı biçimde** veri iletilmesi ise TCP kullanmak bizim için daha faydalı olacaktır. TCP'de iki cihaz arasında veri iletiminin sağlanması için [3-Way Handshake](#handshake-3-way-handshake) bağlantısı sağlanır.
+  - UDP (User Datagram Protocol)
+    - Eğer ihtiyacımız olan **hız** ise UDP kullanmak bizim için daha faydalı olacaktır. UDP'de TCP'den farklı olarak ihtiyacımız olan paketlerin karşı tarafa gidip gitmemesi önemsenmez. Yani 3-Way Handshake yoktur. Flow control ve tekrar iletim işlemlerinin yapılmamasından dolayı iletim süresi daha azdır. SNMP, TFTP gibi protokoller UDP kullanarak çalışır
+- Internet Layer (İnternet Katmanı)
+  - Bu katmana bazı yerlerde **IP Katmanı** da denmektedir. Bu katmanda sender ve receiver IP adresleri veriye eklenerek verinin en son gideceği adresler belirlenmiş olur. **IP adreslerinin eklenmesiyle, veriyi de içeren yeni veri bloğuna DATAGRAM denir.** ICMP,ARP,IP,IGMP, gibi protokoller bu katmanda çalışır.
+- Network Interface Layer (Ağ Arayüzü Katmanı)
+  - Genelde ağ donanımlarıyla sender arasındaki fiziksel arabirim olarak bilinen katmandır. Bazı yerlerde **Veri Bağlantısı** katmanı da denmektedir. 
+
+![TCP/IP architect](./assets/10-tcp-ip-architect.gif) ![TCP/IP protocols port number](./assets/11-tcp-ip-port-numbers.jpg)
+
+#### TCP/IP Katmanlarında Kullanılan Bazı Protokoller
+- ICMP (Internet Control Message Protocol)
+  - **İnternet Yönetim Mesajlaşma Protokolü**. Ağa bağlı cihazlarla ilgili hata ve türlü bilgi mesajlarını ileten protokoldür. Önemli ve temel bir network protokolüdür.
+- SMTP (Simple Mail Transport Protocol)
+  - Basit Posta Taşıma Protokolü. E-posta sunucusu ile makinemiz arasındaki e-posta gönderme işleminin kurallarını belirleyen protokoldür. E-postaları almak için IMAP ve POP3 protokolleri ise alt protokoller olarak kullanılır. Ülkemizde SMTP'nin 25. portunun bazı ISP'ler tarafından kapatılması durumunda 587. port kullanılmaktadır.
+- SNMP (Simple Network Management Protocol)
+  - Basit Ağ Yönetim Protokolü. Ağımızda gözlemleme (monitoring) işlemleri yapmamızı sağlayan protokoldür.
+- TELNET (Telecomunication Network)
+  - Hostlara, ağ cihazlarına terminal bağlantısı gerçekleştirmek üzere geliştirilmiş bir protokoldür.
+- FTP (File Transfer Protocol)
+  - Dosya Aktarım Protokolü. TCP/IP ağında iki cihaz arasında dosya aktarımı yapabilmeleri için geliştirilmiştir.
+- HTTP (Hypertext Transfer Protocol)
+  - Hiper Metin Aktarım Protokolü. TCP/IP ağlarında yaygın olarak WEB sayfalarının görüntülenmesi için kullanılır.
+- HTTPS (Secure Hypertext Transfer Protocol)
+  - Güvenli Hiper Metin Aktarım Protokolü. HTTP'ye **SSL(Secure Socket Layer)** yani güvenli soket katmanının eklenmesiyle elde edilen bir protokoldür. 
+### OSI (Open Systems Interconnection) Referans Modeli
+ISO tarafından 1970'lerin sonunda piyasaya çıkartılmıştır. Bir referans **modeli**dir. Ağların oluşturulması sırasında donanımsal ve yazılımsal çözümleri düzenleyen standarttır. Ağ ile etkileşime sahip uygulamaların birbirleriyle nasıl, ne şekilde iletişim kuracaklarını tanımlar. 7 katmandan oluşur.<br> OSI bir standart olmasından dolayı **ortama göre değişiklik göstermez**. <br>
+Katmanlar 1'den 7'ye doğru hareket edebildiği gibi 7'den 1'e doğru da hareket edebilir. 7 katman birbirleri ile ilişki içerisindedir. <br>
+OSI Referans Modelini **2 büyük grup altında toplayabiliriz**. İlk grup 1. Layer'dan 4. Layer'a kadardır. **1. ve 4. Layer'lar bu gruba dahildir**. Bu ilk grubun amacı sender'dan çıkan verinin receiver'a ulaşmasının nasıl olduğunu açıklayan bölümdür. İkinci grup ise **7.,6. ve 5. Layer'lardan oluşur**. Bu son grup; cihazların üzerinde çalışan uygulamalar ile nasıl etkileşime geçeceğini belirler. <br>
+Bazı cihazlar bu 7 katmanda da çalışabilirler. Bunlar:
+- Web sitelerinin ya da uygulamalarının bulunduğu sunucular
+- Ağda bulunan hostlar
+- Ağ yönetim istasyonları ya da yabancı isimlendirilmesiyle NMS'ler
+- Gateway (Geçit yolu) cihazları
+
+![OSI Referans Modeli](./assets/12-osi-reference-model.jpg)
+
+#### OSI Referans Modelindeki 7 Katman
+- Physical Layer (Fiziksel Katman) - Layer 1
+  - Fiziksel bağlantı sağlandıktan sonra veriler 1 ve 0'lara çevrilerek (binary transmission) taşınırlar. Arayüz bağlantısının belirlendiği katmandır. Kablolar ve Hub'lar bu katmanda çalışır
+- Data Link Layer (Veri Bağlantı Katmanı) - Layer 2
+  - MAC adresi anlamına gelir. Switch Bridge ve Ethernet kartı gibi cihazların bulunduğu katmandır. Verinin fiziksel olarak aktarılmasının gerçekleştiği katmandır. Aynı zamanda hata bildirmek de bu katmanın görevidir.
+- Network Layer (Ağ Katmanı) - Layer 3
+  - Bu katmanda IP protokolü kullanılır. Cihaz olarak bakarsak Router'lar bu katmanda çalışır. Local olarak birbirlerine bağlı olamayan cihazların veri trafiklerini en verimli yoldan birbirlerine aktardıkları katman Network katmanıdır.
+- Transport Layer (İletim Katmanı) - Layer 4
+  - Bu katmanda uçtan uca bağlantı sağlanır. Verilerin bozulmaya uğramadan iletilmesi, akış kontrollerinin yapılması, hata ile karşılaşılırsa verinin sender'dan yeniden istenmesi vb. işlemler bu katmanda yapılır. Bu katmanda iletim 2 türlü yapılır. TCP veya UDP
+- Session Layer (Oturum Katmanı) - Layer 5
+  - Oturum açma vb. işlemlerin yapıldığı katmandır. Anlık mesajlaşmanın yapıldığı yazılımlar bu katmanı bolca kullanmaktadır.
+- Presentation Layer (Sunum Katmanı) - Layer 6
+  - Verilerin belirli formatlara bölünmeye veya toplanmaya başladığı katmandır. 7. katmana 5. katmandan gelen veriyi iletmek ya da tam tersini yapmak için **veriyi kodlayarak ya da çözerek** sunan katmandır.
+- Application Layer (Uygulama Katmanı) - Layer 7
+  - Uç noktada, yani son kullanıcıda çalışan katmandır. Kısaca kullanıcıların ağ kullanarak gönderilen ya da gönderilecek paketlerle bilgisayar ekranlarında veya ağ cihazlarında iletişime geçtiği katmandır.
+
+![OSI Protokolleri](./assets/13-osi-protocols.jpg)
+
 ### MAC Adresi
 Aslında bir Ağ protokolü **değildir**. Network'de (ağ) bulunan her cihazın sahip olduğu, başka ağlara dahil olduğunda bile değişmeyen bir adresi vardır. Bu adres **48 bitlik MAC** adresidir. Fakat **istenirse bu adres manuel olarak değiştirilebilir!** <br>
 Ağda bulunan her bir cihaza ait ağ kartı (NIC) tek bir MAC adresine sahiptir (örnek: 281,321,675,498,362). 
@@ -123,10 +194,47 @@ Aslında `www.domainim.com` 'a gittiğimizde `domain.com`'a değil, bu domainin 
 64 bytes from sof02s27-in-f14.1e100.net (216.58.206.174): icmp_seq=1 ttl=53 time=40.5 ms
 ```
 Gördüğümüz gibi `google.com`'a gitmek istediğimizde, o domainin IP adresini (216.58.206.174) çözümleyen sistemdir.
-### Arp (Address Resolution Protocol)
-OSI Layer 3'de verilen IP adreslerinin, Layer 2'deki MAC adreslerine çözümlenmesini sağlayan bir protokoldür. **STD 37** kodlu bir İnternet standardıdır.
+### ARP (Address Resolution Protocol)
+OSI Layer 3'de verilen IP adreslerinin, Layer 2'deki MAC adreslerine çözümlenmesini sağlayan bir protokoldür. **STD 37** kodlu bir İnternet standardıdır. Kısaca **Adres Çözümleme Protokolü** diyebiliriz. Bir IP adresinin hangi internet arayüzü tarafından kullanıldığı bulmaya yarar.
 ### VPN (Virtual Private Network)
 Sanal Özel Ağ demektir. **Uzaktan** erişim yoluyla **farklı ağlara** bağlanabilmeyi sağlayan teknolojidir. VPN sanal bir ağ uzantısı oluşturduğundan, VPN kullanarak bir ağa sanal olarak bağlandığımız cihaz, sanki **fiziksel olarak bağlıymış gibi** veri alış-verişi yapabilir. 
+
+### Firewall (Güvenlik Duvarı)
+Yerel ağımız ile dış ağlar arasındaki iletişimin güvenliğini sağlayan yazılım ve donanımlardır. Dilersek yerel ağdaki iletişimi de kontrol edebilecek şekilde yapılandırabiliriz. Güvenlik Duvarı üzerinde politikalar belirlenebilir. Bu politikalara '**rule**' denmektedir. Tanımlanmış rule'lar sayesinde hangi data paketlerinin iletilip iletilmeyeceği, erişim engellemeleri, kimlerle iletişime geçilebileceği vs. belirlenebilir.
+#### UFW (Uncomplicated Firewall)
+UFW bir güvenlik duvarı yönetim aracıdır. 
+- `apt-get install ufw` diyerek aracı sistemimize kurabiliriz
+- `ufw enable` UFW'yi etkinleştirebiliriz
+- `ufw disable` UFW'yi pasifleştirebiliriz
+- Mevcut UFW'ye ait kurallar dizisini görmek için `ufw status verbose` komutunu kullanabiliriz
+- Kural içerikleri `etc/ufw` altında `.rules` uzantısı ile biten dosyalarda yer almaktadır
+- UFW üzerinde 2 farklı davranış belirleyebiliriz. `allow` ile gelen isteklere izin verebilir ve `deny` ile gelen istekleri reddedebiliriz.
+- `allow` içeren kuralların tanımlanmasının temel yapısı şu şekildedir -> `ufw allow <port>/<optional:protocol>`
+  - `ufw allow 53/tcp ` -> yalnızca 53. port üzerinden gelen TCP protokollere izin verdik
+- `deny` içeren kuralların tanımlanmasının temel yapısı şu şekildedir -> `ufw deny <port>/<optional:protocol>`
+  - `ufw deny 53 ` -> yalnızca 53. port'tan gelen istekleri kapattık
+- Belirli subnete izin vermek için temel komut dizilimi şu şekildedir -> `ufw allow from <subnet_ip>`
+  - `ufw allow from 192.168.1.0/24`
+- Belirli bir IP adresine erişim izni vermek istersek temel komut dizilimi -> `ufw allow from <IP>`
+  - `ufw allow from 10.50.1.55`
+- Belirli bir IP adresine ve yalnızca bir port için erişim izni vermek istersek temel komut dizilimi -> `ufw allow from <IP> to any port <port_number`
+  - `ufw allow from 10.50.1.55 to any port 22`
+- Bazı durumlarda kuralların birbirini bastırdığı durumlar olabilir. Mesela SSH bağlantılarını tümüyle kapatan bir kural ekledik. Daha sonra sadece bir adres için SSH izni verdik. Bu durumda ilk eklediğimiz kural etkin olacaktır ve belirlediğimiz IP de SSH ile bağlanamayacaktır. Bunun önüne geçmek için araya kural eklemesi yapabiliriz.
+  - `ufw insert 1 allow from <IP> to any port <port_number>`
+- Berlirli bir IP adresi veya subnet için protokol sınırlaması getirebiliriz
+  - `ufw insert 1 allow from <IP> to any port <port_number> proto <protokol>` -> `ufw insert 1 allow from 10.50.1.55 to any port 22 proto tcp`
+- UFW üzerinde kural kaldırmak istersek eklediğimiz rule'a `delete` eklememeiz yeterli olacaktır
+  - `ufw deny 80/tcp`
+  - `ufw delete deny 80/tcp`
+- Ya da tüm kurallar içerisinden belirlediğimizi silmek istersek `ufw status numbered` ile belirlediğimiz tüm rule'ları listeleyebiliriz. Ardından silmek istediğimizin numarasını argüman olarak yollayarak silebiliriz. `ufw delete <numara>` -> `ufw delete 1` gibi
+- UFW `etc/services` altına da erişebildiği için hizmet (service) adına göre de rule ekleyebiliriz. Temel komut dizilimi şu şekildedir -> `ufw deny <service>`
+  - `ufw deny ssh` -> ssh servisini devre dışı bıraktık, bağlantıları engelledik
+- UFW loglama için ekstra bir argüman yollanmadığı sürece `low` level loglama yapar. Temel komut dizilimi şu şekildedir -> `ufw logging <log_level>` -> `ufw logging off` vb. Loglama için seçenekler şunlardır:
+  - `low` -> düşük seviye loglama
+  - `medium` -> orta seviye loglama
+  - `high` -> yüksek seviye loglama
+  - `full` -> en yüksek seviye, detaylı loglama
+  - `off` -> loglama kapalı
 
 ## Cihazların İletişime Başlaması
 Cihazlar iletişime başlamadan önce kendi aralarında bir iletişim şekli belirlerler. Aynı zamanda veri iletiminin doğru ve düzenli olması açısından bir de protokol belirlenir.
@@ -390,3 +498,5 @@ Bu saldırıda mantık şu şekilde işlemektedir; **kaynak, düşürmeye çalı
 - Eğer kısa süreli ağdan düşsün ve geri bağlansın istersek 5 10 adet paket yollayabiliriz.
 
 ![aireplay-ng deauth](./assets/9-deauth.png)
+
+## Ağlara Saldırmak
