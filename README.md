@@ -277,7 +277,7 @@ New MAC:       82:b3:a4:1e:dd:08 (unknown)
 **Monitor Mode:** herhangi bir ağa bağlanmadan pasif olarak ilgili ağdaki tüm trafiği izlememize olanak sağlayan mod. <br>
 **Managed Mode:** istemcimizin bir ağa bağlanarak hizmet aldığı mod. <br>
 ##### Mod Değiştirmek İçin 1. Yöntem (airmon-ng)
-- `airmong-ng start wlan0` ile monitör mod'a geçebiliriz.
+- `airmon-ng start wlan0` ile monitör mod'a geçebiliriz.
 - `ifconfig` ile veya `iwconfig wlan0mon` ile monitör mod'a geçip geçmediğimize bakabiliriz.
 - `airmon-ng stop wlan0mon` ile geri managed mod'a geçebiliriz.
 ```
