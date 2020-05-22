@@ -27,6 +27,12 @@
 - [Dark Web](#dark-web)
   - [Tor Browser Yüklemek](#tor-browser-y%c3%bcklemek)
 - [Ufak Bir Terminal Trick'i](#ufak-bir-terminal-tricki)
+- [Ağlara Saldırmak](#a%c4%9flara-sald%c4%b1rmak)
+  - [Saldırı Öncesi Ayarlar](#sald%c4%b1r%c4%b1-%c3%96ncesi-ayarlar)
+    - [MAC Adresi Değiştirmek](#mac-adresi-de%c4%9fi%c5%9ftirmek)
+    - [Monitor ve Managed Mod](#monitor-ve-managed-mod)
+        - [Mod Değiştirmek İçin 1. Yöntem (airmon-ng)](#mod-de%c4%9fi%c5%9ftirmek-%c4%b0%c3%a7in-1-y%c3%b6ntem-airmon-ng)
+        - [Mod Değiştirmek İçin 2. Yöntem (iwconfig)](#mod-de%c4%9fi%c5%9ftirmek-%c4%b0%c3%a7in-2-y%c3%b6ntem-iwconfig)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -232,4 +238,110 @@ $ ifconfig
 .
 .
 .
+```
+
+# Ağlara Saldırmak
+Dökümanımızın bu bölümünde bolca `wlan0` argümanını göreceğiz. Ağ arayüzümüzü temsil eder. Benim cihazımda `wlan0` olarak gözüktüğü için argüman olarak `wlan0` gönderiyorum. **Döküman boyunca `wlan0` gördüğümüz yerlerin argüman olduğunu ve kendinize ait işlem yapmak istediğiniz ağ arayüzünüzü kullanmanız gerektiğini lütfen unutmayın.** :innocent:
+- Ağ arayüzlerimizi listelemek ve öğrenmek için `ifconfig` komutunu kullanabiliriz.
+- Sadece wireless arayüzlerimizi listelemek için ise `iwconfig wlan0` komutunu kullanabiliriz. Yine kendinize ait ağ arayüzünü argüman olarak göndermeniz gerektiğini lütfen unutmayınız. :innocent:
+## Saldırı Öncesi Ayarlar
+### MAC Adresi Değiştirmek
+Cihazlar birbirleriyle iletişim kurarken MAC adresleri üzerinden iletişim kurarlar. Fakat bunu sistemsel olarak değiştirebiliriz.
+- `ifconfig wlan0 down` ağ arayüzümüzü düşürüyoruz, servis dışı bırakıyoruz.
+- `macchanger wlan0 --random` komutu ile ilgili ağ arayüzümüzün MAC adresini değiştiriyoruz. Çıktıdan da görüleceği üzere MAC adresi başarılı bir şekilde değişmiş oldu.
+- `ifconfig wlan0 up` komutu ile tekrar ağ arayüzümüzü aktif hale getiriyoruz.
+```
+# ifconfig wlan0 down
+# macchanger wlan0 --random
+>>> Current MAC:   2a:f9:66:3e:94:53 (unknown)
+Permanent MAC: 4c:bb:58:42:c3:89 (unknown)
+New MAC:       82:b3:a4:1e:dd:08 (unknown)
+
+# ifconfig wlan0 up
+
+# ifconfig
+>>> wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.105  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 82:b3:a4:1e:dd:08  txqueuelen 1000  (Ethernet)
+        RX packets 11961  bytes 1369251 (1.3 MiB)
+        RX errors 0  dropped 2  overruns 0  frame 0
+        TX packets 1262  bytes 228105 (222.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+### Monitor ve Managed Mod
+**Ufak bir not: `wlan0` ve `wlan0mon` argümanlarının cihazdan cihaza değişebileceğini lütfen unutmayın :innocent: Kendi ağ arayüzlerinizi listelemek için `ifconfig` kullanabilirsiniz** :innocent: <br>
+**Monitor Mode:** herhangi bir ağa bağlanmadan pasif olarak ilgili ağdaki tüm trafiği izlememize olanak sağlayan mod. <br>
+**Managed Mode:** istemcimizin bir ağa bağlanarak hizmet aldığı mod. <br>
+##### Mod Değiştirmek İçin 1. Yöntem (airmon-ng)
+- `airmong-ng start wlan0` ile monitör mod'a geçebiliriz.
+- `ifconfig` ile veya `iwconfig wlan0mon` ile monitör mod'a geçip geçmediğimize bakabiliriz.
+- `airmon-ng stop wlan0mon` ile geri managed mod'a geçebiliriz.
+```
+# airmon-ng start wlan0
+>>> Found 2 processes that could cause trouble.
+Kill them using 'airmon-ng check kill' before putting
+the card in monitor mode, they will interfere by changing channels
+and sometimes putting the interface back in managed mode
+
+    PID Name
+    909 wpa_supplicant
+  16148 NetworkManager
+
+PHY     Interface       Driver          Chipset
+
+phy0    wlan0           ath9k           Qualcomm Atheros QCA9565 / AR9565 Wireless Network Adapter (rev 01)
+
+                (mac80211 monitor mode vif enabled for [phy0]wlan0 on [phy0]wlan0mon)
+                (mac80211 station mode vif disabled for [phy0]wlan0)
+
+
+# iwconfig wlan0mon
+>>> wlan0mon  IEEE 802.11  Mode:Monitor  Frequency:2.462 GHz  Tx-Power=16 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:off
+
+
+# airmon-ng stop wlan0mon
+>>> PHY     Interface       Driver          Chipset
+
+phy0    wlan0mon        ath9k           Qualcomm Atheros QCA9565 / AR9565 Wireless Network Adapter (rev 01)
+
+                (mac80211 station mode vif enabled on [phy0]wlan0)
+
+                (mac80211 monitor mode vif disabled for [phy0]wlan0mon)
+```
+##### Mod Değiştirmek İçin 2. Yöntem (iwconfig)
+- `ifconfig wlan0 down` komutu ile ilgili ağ arayüzümüzü servis dışı bırakırız
+- `iwconfig wlan0 mode monitor` ilgili ağ arayüzümüzü **monitor** moda geçiririz
+- `ifconfig wlan0 up` ilgili ağ arayüzümüzü tekrar devreye sokarız
+- `iwconfig wlan0` ile ilgili ağ arayüzümüzün modunu kontrol edebiliriz
+```
+# ifconfig wlan0 down
+# iwconfig wlan0 mode monitor
+# ifconfig wlan0 up
+# iwconfig wlan0
+>>> wlan0     IEEE 802.11  Mode:Monitor  Frequency:2.462 GHz  Tx-Power=16 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:off
+
+```
+- Geri çevirmek istersek ise aynı komutları **managed mode** için yapıyoruz.
+-  `ifconfig wlan0 down` komutu ile ilgili ağ arayüzümüzü servis dışı bırakırız
+- `iwconfig wlan0 mode managed` ilgili ağ arayüzümüzü **managed** moda geçiririz
+- `ifconfig wlan0 up` ilgili ağ arayüzümüzü tekrar devreye sokarız
+- `iwconfig wlan0` ile ilgili ağ arayüzümüzün modunu kontrol edebiliriz
+```
+# ifconfig wlan0 down
+# iwconfig wlan0 mode managed
+# ifconfig wlan0 up
+# iwconfig wlan0
+>>> wlan0     IEEE 802.11  ESSID:"SUPERONLINE_WiFi_9547"  
+          Mode:Managed  Frequency:2.462 GHz  Access Point: 64:6D:6C:65:03:82   
+          Bit Rate=39 Mb/s   Tx-Power=16 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Encryption key:off
+          Power Management:off
+          Link Quality=24/70  Signal level=-86 dBm  
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:1  Invalid misc:2   Missed beacon:0
 ```
