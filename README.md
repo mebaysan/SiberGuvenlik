@@ -547,7 +547,7 @@ Hedef ağ üzerinde paket alış-verişi yaparak veri akışını sağlarız
 - 1-) Bekleriz ki yeni birisi ağa bağlansın
 - 2-) Mevcut ağa bağlı birini [Deauth Saldırısı](#deauth-sald%c4%b1r%c4%b1s%c4%b1) ile ağdan düşürürüz ve yeniden bağlanmasını sağlarız. Yakalanan Handshake sağ üstte gözükecektir (`airodump-ng` ile hedef ağı izlerken). Yakaladığımız Handshake yazdığımız dosya içerisinde vardır ve oluşturduğumuz Wordlist'i bu Handshake'e karşı deneyebiliriz
 ##### Wordlist Oluşturmak
-Wordlist oluşturmak **CRUNCH** adı verilen tool'u kullanabiliriz. <br>
+Wordlist oluşturmak için **CRUNCH** adı verilen tool'u kullanabiliriz. <br>
 Temel komut dizimi şu şekildedir -> `crunch <min> <max> <char> -t <pattern> -o <dosya_adi>`
 ```
 # crunch 8 9 xyz123 -o testwordlist
