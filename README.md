@@ -61,6 +61,8 @@
     - [Bağlandığımız Ağları İncelemek](#ba%c4%9fland%c4%b1%c4%9f%c4%b1m%c4%b1z-a%c4%9flar%c4%b1-%c4%b0ncelemek)
       - [Netdiscover](#netdiscover)
       - [Nmap](#nmap)
+    - [Man In The Middle (Ortadaki Adam/MITM)](#man-in-the-middle-ortadaki-adammitm)
+      - [ARP Spoof (ARP Kandırma)](#arp-spoof-arp-kand%c4%b1rma)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -189,7 +191,8 @@ Bazı cihazlar bu 7 katmanda da çalışabilirler. Bunlar:
 
 ### MAC Adresi
 Aslında bir Ağ protokolü **değildir**. Network'de (ağ) bulunan her cihazın sahip olduğu, başka ağlara dahil olduğunda bile değişmeyen bir adresi vardır. Bu adres **48 bitlik MAC** adresidir. Fakat **istenirse bu adres manuel olarak değiştirilebilir!** <br>
-Ağda bulunan her bir cihaza ait ağ kartı (NIC) tek bir MAC adresine sahiptir (örnek: 281,321,675,498,362). 
+Ağda bulunan her bir cihaza ait ağ kartı (NIC) tek bir MAC adresine sahiptir (örnek: 281,321,675,498,362). <br>
+Cihazlar birbirleriyle iletişim kurarken MAC adresleri üzerinden iletişim kurarlar. 
 ### ISP 
 İnternet Servis Sağlayıcı demektir. İnternet'i belirli ücretler veya yasalar, sözleşmeler vb. karşılığında bize ulaştıran şirket veya kuruluşlardır (Türk Telekom vb.).
 ### IP
@@ -603,7 +606,7 @@ Bu bölümde yapılan uygulamalar ve çalıştırılan komutlar 2 cihazında (bi
 Aynı zamanda bu bölümde yazdığım:
 - `192.168.1.218` ->  hedef cihazımın IP adresi
 - `192.168.1.87` -> benim cihazımın IP adresi
-- `192.168.1.0/24` -> yine bana ait bir IP taraması. Eğer ki siz hedef bilgisayarınızı ve kali cihazınızı sanal makina üzerinden çalıştırıyorsanız Nat Mod'da çalıştırmanız durumunda IP adresleri `10.0.1.0/24` ve `10.0.1.12` vb. şekilde değişebilecektir :innocent:
+- `192.168.1.0/24` -> yine bana ait IP taraması yaparken kullanacağım adres. Eğer ki siz hedef bilgisayarınızı ve kali cihazınızı sanal makina üzerinden çalıştırıyorsanız Nat Mod'da çalıştırmanız durumunda IP adresleri `10.0.1.0/24` ve `10.0.1.12` vb. şekilde değişebilecektir :innocent: Adreslere değil komutlara, tool'lara ve çalışma mantıklarına odaklanmakta fayda var :innocent:
 ### Bağlandığımız Ağları İncelemek
 #### Netdiscover
 Mevcut bağlı olduğumuz ağ üzerindeki IP adreslerini taramamızı sağlayan tool'dur. Temel komut dizimi şu şekildedir -> `netdiscover -i <interface> -r <range>`
@@ -680,4 +683,30 @@ All 1000 scanned ports on 192.168.1.105 are closed
 
 Nmap done: 256 IP addresses (8 hosts up) scanned in 64.19 seconds
 
+```
+
+### Man In The Middle (Ortadaki Adam/MITM)
+MITM saldırısında olay kısaca şu şekilde işlemektedir;
+- Kurban, sunucuya bir istek atar ve sunucu ona cevap verir (klasik bir network trafiği)
+- Fakat MITM saldırısında biz **Kurban'a: "sunucu benim"** diyoruz <br> 
+ **Sunucuya da: "kurban benim"** diyoruz <br> 
+ Bu sayede Network Trafiği bizim üzerimizden akmaktadır ve gelip giden paketlere müdahale edebiliriz
+- Daha da kısa olarak: Network trafiğinde client ile host arasına girerek trafikten bilgi alıyoruz
+- Bu saldırıyı MAC adresleri üzerinden gerçekleştiriyoruz. Bunun sebebini [Üst başlıklarda](#mac-adresi) açıklamıştık
+![MITM Mimari](./assets/14-mitm-architect.png)
+
+#### ARP Spoof (ARP Kandırma)
+[ARP](#arp-address-resolution-protocol)'nin ne olduğunu yine üst başlıklarda açıklamıştık. Bu sistemde bir açık bulunmaktadır. ARP isteği almadan ARP cevabı gönderme hakkımız bulunmaktadır. Bu açığı kullanarak MITM saldırısında bulunacağız<br>
+Temel komut dizimi şu şekildedir:
+ - `arpspoof -i <interface> -t <target_IP> <sunucu_IP/modem_IP>` -> Bu şu anlama gelmektedir: <target_IP>'yi sanki <sunucu_IP/modem_IP>'ymişim gibi kandıracağım
+ - `arpspoof -i <interface> -t <sunucu_IP/modem_IP> <target_IP>` -> Bu da şu anlama gelmektedir: <sunucu_IP/modem_IP>'yi sanki <target_IP>'ymişim gibi kandıracağım
+- Yani önce hedefe modemmiş gibi, sonra da modeme hedefmiş gibi davranıyoruz.
+- Fakat bu kadar yapmamız yetmez. Bu şekilde bırakırsak hedef'in ağı çöker ve İnternet'e giriş yapamaz. Biz kendi kalimiz üzerinde IP yönlendirmesini aktif hale getirmeliyiz. 
+  - Bunun için de `echo 1 > /proc/sys/net/ipv4/ip_forward` komutunu kullanırız. Bunu Kali'yi her aç-kapa yaptığımızda yapmalıyız
+- Yukarıdaki işlemlerin her birinin farklı terminallerde çalışması gerektiğini söylemeye gerek yoktur sanırsam :innocent:
+
+```
+# arpspoof -i eth0 -t 192.168.1.218 192.168.1.1
+# arpspoof -i eth0 -t 192.168.1.1 192.168.1.218
+# echo 1 > /proc/sys/net/ipv4/ip_forward
 ```
