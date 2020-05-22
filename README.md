@@ -60,6 +60,7 @@
   - [Bağlantı Sonrası Yapılacaklar](#ba%c4%9flant%c4%b1-sonras%c4%b1-yap%c4%b1lacaklar)
     - [Bağlandığımız Ağları İncelemek](#ba%c4%9fland%c4%b1%c4%9f%c4%b1m%c4%b1z-a%c4%9flar%c4%b1-%c4%b0ncelemek)
       - [Netdiscover](#netdiscover)
+      - [Nmap](#nmap)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -598,6 +599,85 @@ Temel komut dizimi şu şekildedir -> `aircrack-ng <yakaladigimiz_handshake_bulu
 # aircrack-ng deneme-01.cap -w testwordlist
 ```
 ## Bağlantı Sonrası Yapılacaklar
+Bu bölümde yapılan uygulamalar ve çalıştırılan komutlar 2 cihazında (biz ve hedef) aynı ağda olduğu varsayılarak yapılmıştır. Hedef olarak Virtualbox üzerinde Windows10 işletim sistemi kurdum ve Network modunu [Bridge](#bridge-mod) olarak ayarladım. <br>
+Aynı zamanda bu bölümde yazdığım:
+- `192.168.1.218` ->  hedef cihazımın IP adresi
+- `192.168.1.87` -> benim cihazımın IP adresi
+- `192.168.1.0/24` -> yine bana ait bir IP taraması. Eğer ki siz hedef bilgisayarınızı ve kali cihazınızı sanal makina üzerinden çalıştırıyorsanız Nat Mod'da çalıştırmanız durumunda IP adresleri `10.0.1.0/24` ve `10.0.1.12` vb. şekilde değişebilecektir :innocent:
 ### Bağlandığımız Ağları İncelemek
 #### Netdiscover
 Mevcut bağlı olduğumuz ağ üzerindeki IP adreslerini taramamızı sağlayan tool'dur. Temel komut dizimi şu şekildedir -> `netdiscover -i <interface> -r <range>`
+- `netdiscover -i wlan0 -r 192.168.1.0/24` -> 0/24 sonu 0-24 arasındakiler demek değildir. **Şimdilik** tüm IP adresleri olarak bilsek yeterlidir.
+```
+# netdiscover -i wlan0 -r 192.168.1.0/24 // -i argümanını yollamak zorunda değiliz
+>>>  Currently scanning: Finished!   |   Screen View: Unique Hosts                                                                                                       
+                                                                                                                                                                     
+ 15 Captured ARP Req/Rep packets, from 7 hosts.   Total size: 864                                                                                                    
+ _____________________________________________________________________________
+   IP            At MAC Address     Count     Len  MAC Vendor / Hostname      
+ -----------------------------------------------------------------------------
+ 192.168.1.1     64:6d:6c:65:03:79      6     360  HUAWEI TECHNOLOGIES CO.,LTD                                                                                       
+ 192.168.1.20    6c:ef:c6:6b:81:1e      3     180  SHENZHEN TWOWING TECHNOLOGIES CO.,LTD.                                                                            
+ 192.168.1.46    64:76:ba:b5:1b:dc      1      60  Apple, Inc.                                                                                                       
+ 192.168.1.21    0e:80:62:12:28:0c      1      60  Unknown vendor                                                                                                    
+ 192.168.1.218   08:00:27:e6:e5:59      2      84  PCS Systemtechnik GmbH                                                                                            
+ 192.168.1.36    0e:80:62:eb:2d:50      1      60  Unknown vendor                                                                                                    
+ 192.168.1.105   0e:80:62:42:c3:89      1      60  Unknown vendor  
+```
+#### Nmap
+Nmap aracını da bağlı olduğumuz ağdaki IP adreslerini bulmak için kullanabiliriz. Temel komut dizimi şu şekildedir -> `nmap <IP>`
+```
+# nmap 192.168.1.0/24
+>>> Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-22 19:44 +03
+Nmap scan report for 192.168.1.1
+Host is up (0.00031s latency).
+Not shown: 995 filtered ports
+PORT    STATE SERVICE
+21/tcp  open  ftp
+53/tcp  open  domain
+80/tcp  open  http
+443/tcp open  https
+990/tcp open  ftps
+MAC Address: 64:6D:6C:65:03:79 (Huawei Technologies)
+
+Nmap scan report for 192.168.1.20
+Host is up (0.0015s latency).
+All 1000 scanned ports on 192.168.1.20 are closed
+MAC Address: 6C:EF:C6:6B:81:1E (Shenzhen Twowing Technologies)
+
+Nmap scan report for 192.168.1.21
+Host is up (0.0025s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+MAC Address: 0E:80:62:12:28:0C (Unknown)
+
+Nmap scan report for 192.168.1.36
+Host is up (0.0020s latency).
+Not shown: 999 closed ports
+PORT      STATE SERVICE
+62078/tcp open  iphone-sync
+MAC Address: 88:E9:FE:EB:2D:50 (Apple)
+
+Nmap scan report for 192.168.1.38
+Host is up (0.010s latency).
+All 1000 scanned ports on 192.168.1.38 are filtered (828) or closed (172)
+MAC Address: 0E:80:62:95:DB:42 (Unknown)
+
+Nmap scan report for 192.168.1.218
+Host is up (0.00025s latency).
+All 1000 scanned ports on 192.168.1.218 are filtered
+MAC Address: 08:00:27:E6:E5:59 (Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 192.168.1.87
+Host is up (0.0000070s latency).
+All 1000 scanned ports on 192.168.1.87 are closed
+
+Nmap scan report for 192.168.1.105
+Host is up (0.0000090s latency).
+All 1000 scanned ports on 192.168.1.105 are closed
+
+Nmap done: 256 IP addresses (8 hosts up) scanned in 64.19 seconds
+
+```
