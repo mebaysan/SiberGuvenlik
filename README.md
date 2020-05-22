@@ -1,6 +1,10 @@
 # İçindekiler
 - [İçindekiler](#%c4%b0%c3%a7indekiler)
 - [Giriş](#giri%c5%9f)
+- [Sanal Makina (VirtualBox vb.) Ağ Yapılandırması](#sanal-makina-virtualbox-vb-a%c4%9f-yap%c4%b1land%c4%b1rmas%c4%b1)
+  - [NAT Mod](#nat-mod)
+  - [Bridge Mod](#bridge-mod)
+  - [Host Only Mod](#host-only-mod)
 - [Ağlara Giriş](#a%c4%9flara-giri%c5%9f)
   - [İletişim Nedir?](#%c4%b0leti%c5%9fim-nedir)
   - [Ağ Nedir?](#a%c4%9f-nedir)
@@ -53,6 +57,9 @@
         - [Handshake Yakalamak](#handshake-yakalamak)
         - [Wordlist Oluşturmak](#wordlist-olu%c5%9fturmak)
         - [Handshake'e Karşı Wordlist Kullanmak](#handshakee-kar%c5%9f%c4%b1-wordlist-kullanmak)
+  - [Bağlantı Sonrası Yapılacaklar](#ba%c4%9flant%c4%b1-sonras%c4%b1-yap%c4%b1lacaklar)
+    - [Bağlandığımız Ağları İncelemek](#ba%c4%9fland%c4%b1%c4%9f%c4%b1m%c4%b1z-a%c4%9flar%c4%b1-%c4%b0ncelemek)
+      - [Netdiscover](#netdiscover)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -74,6 +81,14 @@ Su Mo Tu We Th Fr Sa
 24 25 26 27 28 29 30  
 31   
 ```
+# Sanal Makina (VirtualBox vb.) Ağ Yapılandırması
+Kurduğumuz sanal makinanın Network adaptör modlarının ne anlama geldiğine bakalım
+## NAT Mod
+Kullandığımız sanal işletim sistemine IP adresinin sanal ağ kartı tarafından atanmasıdır. Bu modda sanal işletim sistemimiz, üzerinde çalıştığı fiziksel işletim sistemi ile aynı networkde çalışan cihazlar ile iletişim kuramazken; NAT moda alınmış diğer sanal sistemler ile iletişim kurabilir.
+## Bridge Mod
+Sanal makinemiz IP isteğinde bulunduğunda, IP isteği sanal ağ kartından değil, üzerinde çalıştığı fiziksel makinanın ağ kartı ile karşılanır ve bir IP adresi atanır. Mesela makinamızın adresi 192.168.1.12 ise Kali'mizin adresi 192.168.1.9 olabilir ve fiziksel ağa dahil edebiliriz. 
+## Host Only Mod
+Bu mod sanal makineler için özel bir ağ oluşturmamızı sağlar. Sanal makineler İnternet'e çıkamaz fakat kendi aralarında haberleşebilir
 # Ağlara Giriş
 ## İletişim Nedir?
 **İsim olarak**; duygu, düşünce veya bilgilerin akla gelebilecek her türlü yolla başkalarına aktarılması, bildirişim, haberleşme, komünikasyon. (TDK, 2020) <br>
@@ -582,3 +597,7 @@ Temel komut dizimi şu şekildedir -> `aircrack-ng <yakaladigimiz_handshake_bulu
 ```
 # aircrack-ng deneme-01.cap -w testwordlist
 ```
+## Bağlantı Sonrası Yapılacaklar
+### Bağlandığımız Ağları İncelemek
+#### Netdiscover
+Mevcut bağlı olduğumuz ağ üzerindeki IP adreslerini taramamızı sağlayan tool'dur. Temel komut dizimi şu şekildedir -> `netdiscover -i <interface> -r <range>`
