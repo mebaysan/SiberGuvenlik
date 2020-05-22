@@ -33,6 +33,10 @@
     - [Monitor ve Managed Mod](#monitor-ve-managed-mod)
         - [Mod Değiştirmek İçin 1. Yöntem (airmon-ng)](#mod-de%c4%9fi%c5%9ftirmek-%c4%b0%c3%a7in-1-y%c3%b6ntem-airmon-ng)
         - [Mod Değiştirmek İçin 2. Yöntem (iwconfig)](#mod-de%c4%9fi%c5%9ftirmek-%c4%b0%c3%a7in-2-y%c3%b6ntem-iwconfig)
+  - [Ağlarla İlgili Bilgi Toplamak](#a%c4%9flarla-%c4%b0lgili-bilgi-toplamak)
+    - [Ağları İncelemek (Sniffing)](#a%c4%9flar%c4%b1-%c4%b0ncelemek-sniffing)
+    - [Belirli Bir Ağa Özel Bilgi Edinmek](#belirli-bir-a%c4%9fa-%c3%96zel-bilgi-edinmek)
+    - [Deauth Saldırısı](#deauth-sald%c4%b1r%c4%b1s%c4%b1)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -345,3 +349,42 @@ phy0    wlan0mon        ath9k           Qualcomm Atheros QCA9565 / AR9565 Wirele
           Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
           Tx excessive retries:1  Invalid misc:2   Missed beacon:0
 ```
+## Ağlarla İlgili Bilgi Toplamak
+### Ağları İncelemek (Sniffing)
+Networkler üzerindeki trafikleri izlemeye verilen isim **sniffing**'dir.
+- Öncelikle eğer monitör modda değilsek `airmon-ng start wlan0` ile monitör moda geçebiliriz.
+- Teyit etmek için bir üst başlıktan bildiğimiz `iwconfig wlan0mon` komutunu kullanabiliriz.
+- **Sniffing** yapmak için `airodump-ng wlan0mon` komutunu kullanabiliriz. Bu sayede etrafımızdaki ağları ve onlarla ilgili bilgileri görebiliriz. `ctrl + c` kombinasyonu ile çıkış yapabiliriz.
+```
+# airmon-ng start wlan0
+# airodump-ng wlan0mon
+```
+![airodump-ng wlan0mon](./assets/7-airodump-ng.png)
+**airodump-ng** sonucu gelen veriler ne anlama gelmektedir?
+- **BSSID** -> MAC Adresi 
+- **PWR** -> Power, ağların bize uzaklığıdır. Absolute olarak küçüldükçe bize yaklaşmaktadır. Yani -84 olarak gözüken ilk ağ -85 olana göre daha yakındadır
+- **Beacons** -> Sinyaller
+- **#Data** -> Elimizde olan, kullanabileceğimiz datalar
+- **CH** -> Channel, veri alış-verişi hangi kanaldan yapılıyor onu göstermektedir
+- **ENC** -> Encryption, ağın nasıl şifrelendiğini göstermektedir. WPA2 diğerlerine göre daha güvenlidir
+- **CIPHER** -> Decrypt modeli
+- **ESSID** -> Ağın adıdır
+### Belirli Bir Ağa Özel Bilgi Edinmek
+Temel olarak yapı şu şekildedir: `airodump-ng --channel <channel> --bssid <bssid> --write <file-name> <interface>`
+- `# airodump-ng --channel 11 --bssid 64:6D:6C:65:03:82 --write deneme.txt wlan0mon` komutu ile tek bir bssid'e ait trafiği izlemeye başladık. Ve bize bu ağa bağlı cihazların MAC adresleri (**STATION**) vb. kritik bilgileri verecektir. `--write` argümanını geçersek aldığı bilgileri bir dosyaya yazacaktır.
+```
+# airodump-ng --channel 11 --bssid 64:6D:6C:65:03:82 --write deneme.txt wlan0mon   
+```
+![airodump-ng ağa özel](./assets/8-aga-ozel-airodump-ng.png)
+
+Ağa özel bilgi edindikten sonra gelen veriler bir önceki başlığa ek olarak;
+- **Frames** -> Paket alış-verişindeki paketlerin sayısını verir.
+- Bu ekrandaki çıktıdan daha detaylı olan bilgi `--write` argümanı ile yazılan `.cap` uzantılı dosya içerisinde bulunur.
+### Deauth Saldırısı
+Deauth saldırısı kısaca hedef cihaz ile host arasındaki iletişimi keserek hedefi ağdan düşürme saldırısıdır. Bunu da `aireplay` aracını kullanarak yapacağız. <br>
+Temel komut dizimi şu şekildedir: `aireplay-ng --deauth <packets> -a <kaynak_mac> -c <hedef_mac> <interface>` <br>
+Bu saldırıda mantık şu şekilde işlemektedir; **kaynak, düşürmeye çalıştığımız hedefe: 'ben senden ayrılacağım' diyor, hedef de kaynağa diyor ki: 'ben senden ayrılacağım'**. Aslında ikisi de birbirlerine bir şey demiyor. Biz kendilerinin yerlerine geçip yine kendilerine bir şeyler söylüyoruz gibi düşünebiliriz.
+- `aireplay-ng --deauth 10000 -a 64:6D:6C:65:03:82 -c 0E:80:62:12:28:0D wlan0mon` komutu ile kaynak MAC ve hedef MAC'e deauth paketleri (10000 adet) yolluyoruz.
+- Eğer kısa süreli ağdan düşsün ve geri bağlansın istersek 5 10 adet paket yollayabiliriz.
+
+![aireplay-ng deauth](./assets/9-deauth.png)
