@@ -725,13 +725,13 @@ Temel komut dizimi şu şekildedir:
 - Tool'u açmak için temel komut dizilimi -> `bettercap -iface <interface>`
 - Programı açtıktan sonra:
   - `nmap` ile yaptığımız işlemi burada da yapabiliriz
-  - `net.probe on` komutu ile birlikteağdaki IP adreslerini ve MAC adreslerini bulabiliriz
+  - `net.probe on` komutu ile birlikte ağdaki IP adreslerini ve MAC adreslerini bulabiliriz
   - `net.show` komutu ile tüm ağları daha detaylı tablo olarak görebiliriz
 
 ![Bettercap Net.Probe On & Net.Show](./assets/15-bettercap-netprobe-netshow.png)
 #### Bettercap ile ARP Spoof 
 - `set arp.spoof.fullduplex true` -> komutu ile ARP spoof modumuzu etkin hale getirdik
-- `set arp.spoof.targets 192.168.1.218` -> komutu ile hedef IP adresimizi belirtiyoruz. Başka hedeflerimiz de varsa `,` ayırarak argüman olarak yollayabiliriz
+- `set arp.spoof.targets 192.168.1.218` -> komutu ile hedef IP adresimizi belirtiyoruz. Başka hedeflerimiz de varsa `,` ile ayırarak argüman olarak yollayabiliriz
 - `arp.spoof on` -> komutu ile ARP Spoof saldırımızı başlatabiliriz
 - Hedef makinamızda ARP tablosuna bakarsak, modem (192.168.1.1) ile Kali makinamızın (192.168.1.87) MAC adreslerinin aynı olduğunu göreceğiz
 ![Bettercap ARP Spoof](./assets/16-arp-spoof-bettercap.png)
