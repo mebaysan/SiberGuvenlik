@@ -912,3 +912,5 @@ Trojanımızı oluştururken set ettiğimiz `LHOST` ve `LPORT` 'u burada da set 
 set LHOST 192.168.1.87
 ```
 Ardından `exploit` diyerek exploiti çalıştırabiliriz. İlgili LHOST'da bir session (oturum/bağlantı isteği) oluşturulursa dinlemeye başlayacaktır.
+
+![Multi Handler Exploit](./assets/31-multi-handler-exploit.png)
