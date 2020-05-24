@@ -75,6 +75,8 @@
     - [Kurulum](#kurulum)
     - [Kullanım](#kullanım)
   - [Msfconsole](#msfconsole)
+- [Kullanıcılara Saldırmak](#kullanıcılara-saldırmak)
+  - [Veil](#veil)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -98,7 +100,7 @@ Su Mo Tu We Th Fr Sa
 ```
 
 [Sanal Makina](#sanal-makina-virtualbox-vb-a%c4%9f-yap%c4%b1land%c4%b1rmas%c4%b1) ve [Ağlara Giriş](#a%c4%9flara-giri%c5%9f) bölümündeki tanımlara ait notları **Gökay Bekşen**'in [Youtube hesabından](https://www.youtube.com/user/gokaybeksen), **Cemal Taner**'in **Kali ile Ofansif Güvenlik** kitabından ve **Oğuz Erden - İrfan Cemal Nursaçan**'ın **Bilgisayar Ağlarına Giriş Rehberi** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım. <br>
-Yine **Kali Linux** ve ilgili **tool**'lara ait notları ise **Atıl Samancıoğlu**'nun [Udemy üzerindeki kursundan](https://www.udemy.com/course/etik-hacker-olma-kursu/), **Cemal Taner**'in **Kali ile Ofansif Güvenlik** kitabından ve **Mustafa Altınkaynak**'ın **Siber Güvenlik ve Hacking** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım.
+Yine **Kali Linux** ve ilgili **tool**'lara ait notları ise **Atıl Samancıoğlu**'nun [Udemy üzerindeki kursundan](https://www.udemy.com/course/etik-hacker-olma-kursu/) ve **Mustafa Altınkaynak**'ın **Siber Güvenlik ve Hacking** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım.
 # Sanal Makina (VirtualBox vb.) Ağ Yapılandırması
 Kurduğumuz sanal makinanın Network adaptör modlarının ne anlama geldiğine bakalım
 ## NAT Mod
@@ -853,4 +855,15 @@ msf5 exploit(unix/ftp/vsftpd_234_backdoor) > set RPORT 21
 ![exploit success](./assets/24-exploit-success.png)
 
 - Diğer exploitleri kullanmak için de basit bir şekilde google'da arama yapabiliriz
+
+# Kullanıcılara Saldırmak
+Sistemlerde açık bulamadığımız zaman direkt olarak kullanıcılara **Trojan** ile saldırmayı deneyebiliriz.
+
+## Veil
+[Veil Framework](https://github.com/Veil-Framework/Veil) bizim için trojan oluşturmamızı sağlayan bir tool'dur. Kurulumu basit bir şekilde kendi dökümantasyonunu kullanarak yapabiliriz. Kurulumu başarılı bir şekilde yaptıysak konsolda `veil` komutu ile Veil Framework'u çalıştırabiliriz.
+- `list` ile kullanılabilir araçları listeleyebiliriz
+- `use <tool_number>` ile kullanmak istediğimiz araca geçiş yapabiliriz
+- `back` ile önceki sayfaya geçebiliriz
+
+![Veil Intro](./assets/25-veil-intro.png)
 
