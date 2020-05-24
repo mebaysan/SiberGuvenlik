@@ -69,6 +69,7 @@
       - [Bettercap ile ARP Spoof](#bettercap-ile-arp-spoof)
       - [Bilgileri Çalmak](#bilgileri-%c3%87almak)
     - [HTTPS Kırmak](#https-k%c4%b1rmak)
+- [Bilgisayarları Ele Geçirmek](#bilgisayarlar%c4%b1-ele-ge%c3%a7irmek)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -90,6 +91,9 @@ Su Mo Tu We Th Fr Sa
 24 25 26 27 28 29 30  
 31   
 ```
+
+[Sanal Makina](#sanal-makina-virtualbox-vb-a%c4%9f-yap%c4%b1land%c4%b1rmas%c4%b1) ve [Ağlara Giriş](#a%c4%9flara-giri%c5%9f) bölümündeki tanımlara ait notları **Gökay Bekşen**'in [Youtube hesabından](https://www.youtube.com/user/gokaybeksen), **Cemal Taner**'in **Kali ile Ofansif Güvenlik** kitabından ve **Oğuz Erden - İrfan Cemal Nursaçan**'ın **Bİlgisayar Ağlarına Giriş Rehberi** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım. <br>
+Yine **Kali Linux** ve ilgili **tool**'lara ait notları ise **Atıl Samancıoğlu**'nun [Udemy üzerindeki kursundan](https://www.udemy.com/course/etik-hacker-olma-kursu/), **Cemal Taner**'in **Kali ile Ofansif Güvenlik** kitabından ve **Mustafa Altınkaynak**'ın **Siber Güvenlik ve Hacking** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım.
 # Sanal Makina (VirtualBox vb.) Ağ Yapılandırması
 Kurduğumuz sanal makinanın Network adaptör modlarının ne anlama geldiğine bakalım
 ## NAT Mod
@@ -763,3 +767,9 @@ Temel komut dizimi şu şekildedir:
 
 5-) hstshijack/hstshijack
 ```
+
+# Bilgisayarları Ele Geçirmek
+Port açıklarını, sistem hataları vb. açıkları kullanarak sisteme sızmaya çalışacağız. <br>
+Bu bölümdeki komutlarımızı ve tool'larımızı kullanırken hedefimiz [Metasploitable](https://sourceforge.net/projects/metasploitable/) (indirme linki örnektir!) olacak.  Metasploitable, üzerinde bilerek açık bulunduran bir sistemdir. Bunu sanal olarak kurmamız gerekmektedir. <br>
+username -> **msfadmin** <br>
+password -> **msfadmin**
