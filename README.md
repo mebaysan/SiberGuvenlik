@@ -72,6 +72,8 @@
 - [Bilgisayarları Ele Geçirmek](#bilgisayarlar%c4%b1-ele-ge%c3%a7irmek)
   - [Metasploitable](#metasploitable)
   - [Zenmap](#zenmap)
+    - [Kurulum](#kurulum)
+    - [Kullanım](#kullan%c4%b1m)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -771,9 +773,13 @@ Temel komut dizimi şu şekildedir:
 ```
 
 # Bilgisayarları Ele Geçirmek
-## Metasploitable
 Port açıklarını, sistem hataları vb. açıkları kullanarak sisteme sızmaya çalışacağız. <br>
-Bu bölümdeki komutlarımızı ve tool'larımızı kullanırken hedefimiz [Metasploitable](https://sourceforge.net/projects/metasploitable/) (indirme linki örnektir!) olacak.  Metasploitable, üzerinde bilerek açık bulunduran bir sistemdir. Bunu sanal olarak kurmamız gerekmektedir. <br>
+Bu bölümdeki komutlarımızı ve tool'larımızı kullanırken hedefimiz [Metasploitable](https://sourceforge.net/projects/metasploitable/) (indirme linki örnektir!) olacak.  
+## Metasploitable
+Metasploitable, üzerinde bilerek açık bulunduran bir sistemdir. Bir sunucu olarak düşünebiliriz. Ağ'daki Metasploitable IP adresini yazarsak üzerinde çalışan web sunucusuna gidecektir. Bunu sanal makinamıza kurmamız gerekmektedir. 
+
+![Metasploitable Önizleme](./assets/20-metasploitable-onizleme.png)
+<br> <br>
 username -> **msfadmin** <br>
 password -> **msfadmin** <br>
 Metasploitable içerisinde de Linux komutlarını çalıştırabiliriz.
@@ -781,3 +787,20 @@ Metasploitable içerisinde de Linux komutlarını çalıştırabiliriz.
 ![Metasploitable Resim](./assets/18-metasploitable-resim.png)
 
 ## Zenmap
+### Kurulum
+- [Bu adresten](https://nmap.org/book/inst-linux.html) Zenmap kurulumu için gerekli yönergeleri görebiliriz
+- `apt-get install alien` ile `rpm` paketlerini `deb` paketlerine derlememizi sağlayan programı indiriyoruz
+- `dpkg -i <paket_adi>` komutu ile yeni oluşan `.deb` dosyamızı yüklüyoruz
+- Artık terminalde `zenmap` yazarsak Zenmap'i açabiliriz
+
+![Zenmap Kurulum](./assets/19-zenmap-kurulum.png)
+
+### Kullanım
+[Metasploitable](#metasploitable) makinamız açıkken üzerinde tarama gerçekleştireceğiz
+- Terminale `zenmap` yazdıktan sonra programımız açılacaktır
+- Sol üstte **Target** kısmına hedef cihazımızın IP adresini yazıyoruz
+- Sağ üstte **Profile** kısmında ise ne tür bir tarama yapmak istediğimizi belirtiyoruz
+- Orta kısımdaki **Command** kısmı ise `nmap`'te aynı işlemi yapmamız için kullanmamız gereken komut dizilimini göstermektedir. Dilersek `nmap` açarak ve ilgili komut dizilimini kullanarak da aynı sonuçları elde edebiliriz
+
+![Zenmap Info](./assets/21-zenmap-info.png)
+
