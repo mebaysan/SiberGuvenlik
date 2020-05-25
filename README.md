@@ -92,6 +92,7 @@
     - [Ekran Görüntüsü Çalmak](#ekran-görüntüsü-çalmak)
     - [Diyalog Çıkartmak](#diyalog-çıkartmak)
     - [Bilgileri Çalmak (Pretty Thieft)](#bilgileri-çalmak-pretty-thieft)
+    - [Backdoor İletmek](#backdoor-i̇letmek)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -115,7 +116,8 @@ Su Mo Tu We Th Fr Sa
 ```
 
 [Sanal Makina](#sanal-makina-virtualbox-vb-a%c4%9f-yap%c4%b1land%c4%b1rmas%c4%b1) ve [Ağlara Giriş](#a%c4%9flara-giri%c5%9f) bölümündeki tanımlara ait notları **Gökay Bekşen**'in [Youtube hesabından](https://www.youtube.com/user/gokaybeksen), **Cemal Taner**'in **Kali ile Ofansif Güvenlik** kitabından ve **Oğuz Erden - İrfan Cemal Nursaçan**'ın **Bilgisayar Ağlarına Giriş Rehberi** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım. <br>
-Yine **Kali Linux** ve ilgili **tool**'lara ait notları ise **Atıl Samancıoğlu**'nun [Udemy üzerindeki kursundan](https://www.udemy.com/course/etik-hacker-olma-kursu/) ve **Mustafa Altınkaynak**'ın **Siber Güvenlik ve Hacking** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım.
+Yine **Kali Linux** ve ilgili **tool**'lara ait notları ise **Atıl Samancıoğlu**'nun [Udemy üzerindeki kursundan](https://www.udemy.com/course/etik-hacker-olma-kursu/) ve **Mustafa Altınkaynak**'ın **Siber Güvenlik ve Hacking** kitabından öğrenmeye çalıştıklarım doğrultusunda not almaya çalıştım. <br>
+Aynı zamanda buradaki notları kendimi geliştirebilmek ve ihtiyacım olan komutları/tool'ları daha rahat kullanabilmek için aldım. Bu dökümanın kötüye kullanımından doğabilecek sonuçlardan okuyucu sorumludur :innocent:
 # Sanal Makina (VirtualBox vb.) Ağ Yapılandırması
 Kurduğumuz sanal makinanın Network adaptör modlarının ne anlama geldiğine bakalım
 ## NAT Mod
@@ -1103,4 +1105,12 @@ Socail Engineering > Pretty Thieft giderek bu event'i çalıştırabiliriz. Hang
 - Hedef Makinada Görünüm
 
 ![Beef Pretty Target](./assets/56-beef-pretty-target.png)
+
+### Backdoor İletmek
+Socail Engineering > Fake Notification Bar(ilgili browser) giderek bu event'i çalıştırabiliriz. Browser bir uyarı verecektir ve şu dosyayı indirmeniz gerekmektedir diyecek. Bizim belirlediğimiz trojan'ın adresini set ederiz ve baam! Hedefimiz eğer bu numaraya kanarsa trojanımızı indirmiş olacak. <br>
+
+Öncelikle [Veil](#veil) kullanarak bir trojan oluşturuyorum ve oluşturulan trojanımı `/var/www/html` yani Kali makinedeki web sunucu altına taşıyorum <br>
+ Beef Panel'de URL kısmına trojanımız web sunucudaki adresini(kendi IP adresim/trojan_path) giriyorum, bu sayede hedef indir butonuna basınca ilgili adresten trojan indirilmiş olacak. Text kısmında da gösterilmesini istediğim text'i set edip execute ediyorum ve kullanıcıya bir uyarı çıkıyor, indir butonuna bastığı an trojanımızı indirmiş oluyor. Hedef dosyayı çalıştırdığı an [msfconsole multi handler](#multi-handler-oluşturmak) ile açılan bağlantıyı dinlemeye başlıyoruz.
+
+ ![Beef Exploit](./assets/57-beef-exploit.png)
 
