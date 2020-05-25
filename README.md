@@ -80,6 +80,9 @@
     - [Trojan Oluşturmak](#trojan-oluşturmak)
     - [Anti-Virüslere Yakalanmamak](#anti-virüslere-yakalanmamak)
     - [Multi Handler Oluşturmak](#multi-handler-oluşturmak)
+- [Sosyal Mühendislik](#sosyal-mühendislik)
+  - [Görseller ile Dosyayı Birleştirmek](#görseller-ile-dosyayı-birleştirmek)
+  - [Uzantıları Değiştirmek](#uzantıları-değiştirmek)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -914,3 +917,61 @@ set LHOST 192.168.1.87
 Ardından `exploit` diyerek exploiti çalıştırabiliriz. İlgili LHOST'da bir session (oturum/bağlantı isteği) oluşturulursa dinlemeye başlayacaktır.
 
 ![Multi Handler Exploit](./assets/31-multi-handler-exploit.png)
+
+# Sosyal Mühendislik
+## Görseller ile Dosyayı Birleştirmek
+Hedefimize trojaınımızı açtırabilmek için onu zararsız bir dosya açtığına ikna etmek işimizi garantiye almak adına önemli olabilir. Bu aşamada oluşturduğumuz Trojan ile Fake bir image birleştireceğiz. Bu sayede hedefimiz resmi açtığında arkada trojanımız çalışacak. Bunun için [Fake Image Exploiter](https://github.com/r00t-3xp10it/FakeImageExploiter) kullanacağız.
+- Öncelikle [Fake Image Exploiter](https://github.com/r00t-3xp10it/FakeImageExploiter.git)'ı `git clone` komutu kullanarak bilgisayarımıza indiriyoruz
+
+![Fake Image Exploiter](./assets/32-fake-image-exploiter-kurulum.png)
+
+- `cd FakeImageExploiter` komutu ile proje dizinine geçiş yapıyoruz.
+- `nano settings` diyerek **settings** dosyasını açıyoruz. Eğer yapmamız gereken konfigürasyon varsa burada yapıyoruz.
+  - **PICTURE_EXTENSION** yazan kısımda kullanacağımız resmin uzantısını belirliyoruz
+  - **PAYLOAD_EXTENSION** yazan kısımda **tojanımızın uzantısını** belirliyoruz
+  - **APACHE_WEBROOT** kısmında kali makinamızdaki web sunucu kök dizinini belirliyoruz
+
+- `./FakeImageExploiter.sh` komutunu çalıştırarak executable dosyayı açıyoruz
+- Program çalıştıktan sonra yönergeler doğrultusunda Trojan ile Görseli birleştiriyoruz
+
+## Uzantıları Değiştirmek
+Aslında uzantıları değil, dosya isimlerinin görünümlerini değiştireceğiz. Bu işlem için de **characters** adlı programı kullanacağız. <br><br>
+Makinamızda yüklü değilse `apt-get install gnome-characters` komutu ile programı makinamıza yüklüyoruz <br>
+Artık programlar altından **Characters** isimli programımızı çalıştırabiliriz
+
+![Caharacters Intro](./assets/33-characters-intro.png)
+
+Arama kısmında `right-to-left` yazıyoruz ve `right-to-left Override` olan metodu seçiyoruz.
+
+![Right-to-left Override](./assets/34-characters-right-to-left.png)
+
+Bizim için şu işlemi yapacaktır; <br>
+Uzantısı `.jpg.exe` olan uzantıyı `.exe.gpj` olarak değiştirecektir. Bu sebeple `.jpg.exe` olan uzantımızı öncelikle biz elimizle `.gpj.exe` olarak değiştiriyoruz sonrasında bu araç yardımıyla uzantıyı tersten yazdırıyoruz. Çıkan sonuç `.exe.jpg` olacaktır <br> 
+Tersten yazdırmak istediğimiz string'in başladığı yere imleci getirip **yapıştır** işlemi (ctrl + v) yapıyoruz ve characters programı bizim için stringi tersten yazıyor
+
+![Characters Success](./assets/35-characters-success.png)
+
+- Ben [Veil](#veil) kullanarak kendime bir trojan oluşturdum ve LHOST'u da kendi makinemin IP adresi olarak set ettim
+- Ardından oluşturduğum trojanı `/var/www/html` altına taşıdım. `systemctl start apache2` diyerek **apache2** servisimi başlattım
+```
+# systemctl start apache2
+# ls
+>>> my_test_trojan.exe
+```
+
+Dilersek kali makinemizin IP adresi altından **apache** sunucumuz altındaki dosyaları listeleyebilir ve değişen dosya adımızı görebiliriz
+
+![Characters Apache2](./assets/36-characters-apache2.png)
+
+[msfconsole](#multi-handler-oluşturmak) kullanarak bir **multi handler** oluşturuyorum ve windows makinamda, Kali IP'mi yazarak Kali'nin web sunucusuna bağlanıp ilgili trojanı indiriyorum
+
+![Characters Windows](./assets/38-characters-windows.png)
+
+Windows makinemde trojan'ı çalıştırıyorum
+
+![Windows Trojan Executable](./assets/39-character-exe.png)
+
+Ve başarılı bir şekilde Kali makinemde bağlantıyı yakalıyorum
+
+![Characters Multi Handler](./assets/40-characters-meterpreter.png)
+
