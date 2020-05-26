@@ -113,6 +113,8 @@
     - [Who is Lookup](#who-is-lookup)
     - [Robots.txt](#robotstxt)
     - [Alt Adresler (Subdomain)](#alt-adresler-subdomain)
+  - [Web Sitesi Pentesting](#web-sitesi-pentesting)
+    - [Kod Çalıştırma Açığı (Command Execution Vulnerability)](#kod-çalıştırma-açığı-command-execution-vulnerability)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -1334,3 +1336,18 @@ Hedef web sitesinin alt adreslerine karşı da saldırı yapmak isteyebilir veya
 - Aracı kurmak istediğimiz dizine gidiyoruz ve `git clone https://github.com/TheRook/subbrute.git` komutunu çalıştırıyoruz.
 - `cd subbrute/` ile proje dizinine gidiyoruz
 - `python3 subbrute.py baysansoft.com` komutu ile hedef adrese ait alt adresleri listeleyebiliriz
+
+## Web Sitesi Pentesting
+Bu bölümde **metasploitable** makinamız üzerindeki sunucudan **DVWA**'e bağlanacağız. Kullanıcı adı -> **admin** password -> **password** olarak giriş yapabiliriz. 
+![dvwa](./assets/76-dwva.png)
+
+DVWA Security sekmesinden güvenlik seviyesini en düşüğe (low) getiriyoruz. Henüz başlangıç aşamasındayız bu sebeple en düşük güvenlik seviyesiyle karşılaşmak temelleri öğrenebilmemiz açısından faydalı olacaktır.
+![dvwa security](./assets/77-dwva-security.png)
+
+### Kod Çalıştırma Açığı (Command Execution Vulnerability)
+Command Execution sekmesinden form input'a aynı zamanda bir terminal komutu yazıyoruz ve görüyoruz ki komut **execute** oluyor. Bu tür açıklara **Command Execution Vulnerability** denmektedir
+![command execution vulnerability](./assets/78-command-execution-vulnerability.png)
+
+Aynı input'ta `IP;mkdir deneme` komutunu çalıştırıyoruz ve ardından `IP;ls` komutunu çalıştırıyoruz. Gördük ki başarılı bir şekilde komutları çalıştırabiliyoruz.
+![command execute success](./assets/79-command-execute-success.png)
+
