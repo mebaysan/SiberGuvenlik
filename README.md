@@ -115,6 +115,10 @@
     - [Alt Adresler (Subdomain)](#alt-adresler-subdomain)
   - [Web Sitesi Pentesting](#web-sitesi-pentesting)
     - [Kod Çalıştırma Açığı (Command Execution Vulnerability)](#kod-çalıştırma-açığı-command-execution-vulnerability)
+  - [XSS](#xss)
+    - [XSS Nedir?](#xss-nedir)
+    - [Reflected XSS (URL ile XSS)](#reflected-xss-url-ile-xss)
+    - [Stored XSS (Depolanmış XSS)](#stored-xss-depolanmış-xss)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -1350,4 +1354,24 @@ Command Execution sekmesinden form input'a aynı zamanda bir terminal komutu yaz
 
 Aynı input'ta `IP;mkdir deneme` komutunu çalıştırıyoruz ve ardından `IP;ls` komutunu çalıştırıyoruz. Gördük ki başarılı bir şekilde komutları çalıştırabiliyoruz.
 ![command execute success](./assets/79-command-execute-success.png)
+
+## XSS
+### XSS Nedir?
+**Cross Site Scripting** yani **Siteler Arası Betik Çalıştırma** anlamına gelir. Hedef web sitesine JavaScript kodu enjekte edebilmemizi sağlar. Bu sayede hedef web sitesine giren bir çok kişiyi hackleyebiliriz. <br>
+Bu bölümde yaptıklarımızı [Beef](#beef) ile birleştirerek daha extreme işler ortaya çıkartabiliriz :innocent:
+### Reflected XSS (URL ile XSS)
+Bir kişinin bilgisayarında bu zararlı kodu çalıştırmak istersek kurbanımızın bu linke tıklaması gerekmektedir. Peki URL ile XSS'de nereden gelmektedir? Zararlı kod parçacığını URL içine enjekte edeceğiz. Bu sayede kurban bu linki açtığında ağımıza düşmüş olacaktır. <br>
+Metasploitable sayesinde elde ettiğimiz DVWA kullanacağız. Sol menü bardan **XSS Reflected** sekmesine giriyoruz. Buradaki input box içine girilen değeri alarak **Hello <DEGER>** şeklinde bir string döndürüyor. Ve fark ettiysek URL kısmında döndürdüğü değeri gösteriyor.
+![xss reflected](./assets/80-xss-reflected.png)
+
+Ardından input'a `<script>alert("Hacklendiniz!")</script>` kodunu ekliyoruz. Örnek olması açısından basit bir alert göstereceğiz, fakat dilersek daha extreme kodlar yazabiliriz :innocent: 
+![xss js](./assets/81-xss-js.png)
+
+Ve submit ettiğimizde JavaScript kodu çalışacaktır. Bu URL'i hedeflere göndererek JavaScript kodunun onlarda da çalışmasını sağlayabiliriz.
+![xss reflected success](./assets/82-xss-reflected-success.png)
+
+### Stored XSS (Depolanmış XSS)
+Zararlı kodumuzu web sitesine saklayacağız, gömeceğiz. Bu sayede bu siteye giren kişilerin browserında da zararlı kod çalışacak ve onları hackleyebileceğiz. <br>
+Bunun için DVWA içerisinden **XSS Stored** sekmesine giriyoruz. Bu sayfada girilen bir mesaj veritabanına kaydedilmektedir. Biz de burada tekrar JavaScript kodu yazacağız ve hedef sitenin veritabanına yazmasını sağlayacağız. Bu sayede başka biri de bu adrese gelse bu JavaScript kodu çalışacak ve başarıya ulaşmış olacağız.
+![xss stored](./assets/83-xss-stored.png)
 
