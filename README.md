@@ -119,6 +119,11 @@
     - [XSS Nedir?](#xss-nedir)
     - [Reflected XSS (URL ile XSS)](#reflected-xss-url-ile-xss)
     - [Stored XSS (Depolanmış XSS)](#stored-xss-depolanmış-xss)
+  - [SQL Injection (SQL Enjeksiyonu)](#sql-injection-sql-enjeksiyonu)
+    - [Metasploitable İçerisindeki Veritabanları](#metasploitable-i̇çerisindeki-veritabanları)
+    - [Mutillidae Veritabanı](#mutillidae-veritabanı)
+    - [Açık Aramak](#açık-aramak)
+    - [SQL Injection Post Metodu](#sql-injection-post-metodu)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -1375,3 +1380,67 @@ Zararlı kodumuzu web sitesine saklayacağız, gömeceğiz. Bu sayede bu siteye 
 Bunun için DVWA içerisinden **XSS Stored** sekmesine giriyoruz. Bu sayfada girilen bir mesaj veritabanına kaydedilmektedir. Biz de burada tekrar JavaScript kodu yazacağız ve hedef sitenin veritabanına yazmasını sağlayacağız. Bu sayede başka biri de bu adrese gelse bu JavaScript kodu çalışacak ve başarıya ulaşmış olacağız.
 ![xss stored](./assets/83-xss-stored.png)
 
+## SQL Injection (SQL Enjeksiyonu)
+### Metasploitable İçerisindeki Veritabanları
+- `mysql -u root -h <METASPLOITABLE_IP>` komutu ile Metasploitable makinamız içerisindeki veritabanı sistemine(MySQL) giriş yapıyoruz.
+- `show databases;` komutu ile bu makinadaki MySQL veritabanlarını görebiliriz.
+```
+# mysql -u root -h 192.168.1.179
+
+MySQL [(none)]> show databases;
+>>> +--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| dvwa               |
+| metasploit         |
+| mysql              |
+| owasp10            |
+| tikiwiki           |
+| tikiwiki195        |
++--------------------+
+7 rows in set (0.001 sec)
+
+```
+- `use db_adi` komutu ile listeden bir veritabanı seçip bağlanabiliriz
+- `show tables;` komutu ile bağlandığımız veritabanındaki tabloları listeleyebiliriz
+```
+MySQL [(none)]> use dvwa
+MySQL [dvwa]> show tables;
+>>> 
++----------------+
+| Tables_in_dvwa |
++----------------+
+| guestbook      |
+| users          |
++----------------+
+2 rows in set (0.001 sec)
+
+```
+- `exit` komutu ile servisten çıkabiliriz.
+
+### Mutillidae Veritabanı
+Metasploitable web sunucusuna bağlanıyoruz ve **Mutillidae** sitesine giriş yapıyoruz. Login/Register sekmesinden kayıt oluşturuyoruz.
+- Eğer hata alırsak, bu hatayı düzeltmemiz gerekiyor
+![mutillidae register error](./assets/84-mutillidae-register.png)
+
+- Metasploitable makinamıza gidiyoruz ve `sudo nano /var/www/mutillidae/config.inc` komutunu çalıştırıyoruz. `sudo` ön ekini kullandığımız için bizden şifre isteyecektir. Şifreyi `msfadmin` olarak girebiliriz.
+- Ardından açılan dosya içerisindeki `$dbname` değişkenini `owasp10` olarak değiştiriyoruz. `ctrl + x` ardından `y` tuş kombinasyonu ile dosyamızı değiştirip çıkıyoruz.
+![mutillidae owasp10](./assets/85-mutillidae-db-error-success.png)
+
+- Daha sonrasında tekrar Mutillidae altından register olarak kullanıcımızı oluşturabiliriz.
+![mutillidae register](./assets/86-mutillidae-register.png)
+
+### Açık Aramak
+Login Page'de herhangi bir **username** giriyorum ve şifre kısmına `'`  ekliyorum. Bu sayede web sitesinin veritabanına attığı SQL kodunu yarıda kesiyoruz ve detaylı bir hata alabiliyoruz.
+![mutillidae sql error](./assets/87-mutillidae-sql-error.png)
+
+Diagnotic Informatin bölümünden anlıyoruz ki, **accounts** adında bir tablosu var bu web sitesinin
+![diagnotic info](./assets/88-diagnoistic-info.png)
+
+Bize hatalı kodu gösteriyor: `SELECT * FROM accounts WHERE username='admin' AND password='''` <br>
+Biz bu koda **Mantıksal SQL Kodu** eklersek aslında SQL Injection yapmış olacağız. Password kısmına `sifre1' AND 1=2#` yazarsak şifremiz doğru olmasına rağmen sisteme girmeyecektir. Fakat `sifre1' AND 1=1#` yazarsak sisteme girecektir. Çünkü `AND 1=1` ile mantıksal bir kod çalıştırıyoruz(sifre1, ben şifremi 'sifre1' olarak belirlediğim için geldi).
+
+### SQL Injection Post Metodu
+Password kısmına `1' OR 1=1#` ve username kısmına `admin` yazacağız. Başarılı bir şekilde giriş yapabileceğiz. Bu kod parçacığı bunun arkada şu şekilde işlenmesini sağlayacak -> `SELECT * FROM accounts WHERE username='admin' AND password='1' OR 1=1#'`<br>
+`OR 1=1` kod parçacığı mantıksal olarak True döndüreceğinden başarılı bir şekilde giriş yapabileceğiz. 
