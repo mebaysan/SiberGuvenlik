@@ -102,6 +102,17 @@
   - [Tunneling (Tünel Servisi) Nedir](#tunneling-tünel-servisi-nedir)
   - [Msfvenom](#msfvenom)
     - [Dinleyiciyi Çalıştıralım](#dinleyiciyi-çalıştıralım)
+- [Web Site Hacking](#web-site-hacking)
+  - [Web Sitesi Bilgi Toplamak](#web-sitesi-bilgi-toplamak)
+    - [Dnsenum](#dnsenum)
+    - [Dnsmap](#dnsmap)
+    - [Dmitry](#dmitry)
+    - [Ters IP (Reverse IP) Araması](#ters-ip-reverse-ip-araması)
+    - [archive.org](#archiveorg)
+    - [dnschecker.org](#dnscheckerorg)
+    - [Who is Lookup](#who-is-lookup)
+    - [Robots.txt](#robotstxt)
+    - [Alt Adresler (Subdomain)](#alt-adresler-subdomain)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -1099,7 +1110,8 @@ Ve başarılı bir şekilde Kali makinemde bağlantıyı yakalıyorum
 Beef, Browser Exploitation Framework olarak geçmektedir. Browser'ları sömürmemizi sağlayan bir tool'dur. Hedefimizin browser'ında JavaScript kodları çalıştırarak onu sömürmemizi sağlayacaktır.
 
 ## Ufak Bir Not
-Bu bölümde denemelerimizi **İç Ağlarda** yani aynı ağda bağlı olduğumuz sanal Windows makinamıza karşı yapacağız. Dış Ağ saldırılarını alt başlıklarda göreceğiz.
+Bu bölümde denemelerimizi **İç Ağlarda** yani aynı ağda bağlı olduğumuz sanal Windows makinamıza karşı yapacağız. Dış Ağ saldırılarını alt başlıklarda göreceğiz. <br>
+Aynı zamanda bu bölüm içerisinde hedef makinamı oltalarken HTTP'ye sahip site olarak bu dökümanın yazıldığı şu sıralar henüz yapım aşamasında olan, freelance bir iş için 2 kişi ile birlikte yaptığımız bir siteyi ve hedef makinada o açıkken alınan screenshot'ları kullandım. Siteyi geliştirenlerin haberi vardır :innocent:
 
 ## Kurulum
 Eğer Beef otomatik olarak yüklü gelmez ise [Beef Project](https://github.com/beefproject/beef)'ten projeyi `git clone https://github.com/beefproject/beef.git` diyerek makinemize indirebiliriz
@@ -1281,4 +1293,44 @@ Msfvenom'da [Veil](#veil)'a alternatif olabilecek bir backdoor oluşturma aracı
 - Kali makinamızda `msfconsole` yardımı ile bağlantıyı dinliyoruz ve hayırlı olsun artık hedef makinayı ele geçirdik
 ![ngrok msfconsole](./assets/61-ngrok-msfconsole.png)
 
- 
+# Web Site Hacking
+## Web Sitesi Bilgi Toplamak
+Bu bölümde hedef sistem olarak [Metasploitable](#metasploitable) kullanacağız. Ne demiştik Metasploitable üzerinde bilerek açık bulunduran bir **sunucu**dur. Metasploitable makinamızın IP adresine Kali makinamızdan istek atınca ilgili web sunucuya ulaşabildiğimizi biliyoruz
+![metasploitable](./assets/69-metasploitable.png)
+### Dnsenum
+Bu tool sayesinde bir organizasyona ait DNS ve IP adreslerini bulabiliriz <br>
+`dnsenum domain` şeklinde kullanıldığında ilgili domain'e ait tüm kayıtlar (A,MX,NS vb.) gösterilir
+![dnsenum](./assets/70-dnsenum.png)
+
+### Dnsmap
+Bu araç sayesinde de hedef sisteme karşı IP ağ bloklarını, alan adlarını, telefon numaralarını vb. keşfedebiliriz. Temel komut dizilimi şu şekildedir -> `dnsmap domain`
+![dnsmap](./assets/72-dnsmap.png)
+
+### Dmitry
+Hedef'in ağ aralığını bu adres ile belirleyebiliriz. Bir host hakkında bir çok bilgi toplanır. Olası alt alanlar, e-postalar, TCP portu vb. Temel komut dizilimi `dmitry domain`'dir.
+![dmitry](./assets/71-dmitry.png)
+
+### Ters IP (Reverse IP) Araması
+Bir IP adresi altında bir çok web sitesi barındırılabilir. Bir siteden bulduğumuz IP adresi ile o IP adresindeki diğer siteleri de bulma işlemine **Reverse IP** denir. <br>
+Bu işlem için [yougetsignal.com](https://www.yougetsignal.com/)'u kullanabiliriz.
+![reverse ip](./assets/73-reverse-ip.png)
+
+### archive.org
+[archive.org](https://archive.org/) sayesinde web sitelerinin önceki hallerini bulabiliriz.
+
+### dnschecker.org
+[dnschecker.org](https://dnschecker.org/) sayesinde de ilgili domaine ait bir çok bilgi elde edebiliriz
+
+### Who is Lookup
+Who is sorguları ile de bir domaine ait temel bilgileri elde edebiliriz. [lookup.icann.org](https://lookup.icann.org/)'u kullanabiliriz. Domain'i kim almış, nereden almış vb.
+![who is lookup](./assets/74-who-is.png)
+
+### Robots.txt
+Hedef web sitelerimizde gizlenmiş dosyalar var mı bunlara bakacağız. Bunun için **dirb** adı verilen tool'u kullanacağız. Temel komut dizilimi şu şekildedir -> `dirb http(s)://domain/IP` hedef domain veya IP adresinde gizli dosyalar var mı buna bakacaktır. Peki bu gizli dosyalar nereden geliyor? **dirb** içerisinde bir wordlist var ve buna göre kontrol işlemi gerçekleştiriliyor.
+![robots.txt](./assets/75-robots.png)
+
+### Alt Adresler (Subdomain)
+Hedef web sitesinin alt adreslerine karşı da saldırı yapmak isteyebilir veya deneyebiliriz. Bu sebeple sub domainleri listelemek de işimize yarayabilir. Bunun için [**subbrute**](https://github.com/TheRook/subbrute) adı verilen aracı kullanacağız.
+- Aracı kurmak istediğimiz dizine gidiyoruz ve `git clone https://github.com/TheRook/subbrute.git` komutunu çalıştırıyoruz.
+- `cd subbrute/` ile proje dizinine gidiyoruz
+- `python3 subbrute.py baysansoft.com` komutu ile hedef adrese ait alt adresleri listeleyebiliriz
