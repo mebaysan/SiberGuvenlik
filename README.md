@@ -124,6 +124,29 @@
     - [Mutillidae Veritabanı](#mutillidae-veritabanı)
     - [Açık Aramak](#açık-aramak)
     - [SQL Injection Post Metodu](#sql-injection-post-metodu)
+- [Kriptolojiye Giriş](#kriptolojiye-giriş)
+  - [Kriptoloji Nedir?](#kriptoloji-nedir)
+  - [Temel Şifreleme Modeli](#temel-şifreleme-modeli)
+    - [Plaintext](#plaintext)
+    - [Ciphertext](#ciphertext)
+    - [Kerckhoff Prensibi (1883)](#kerckhoff-prensibi-1883)
+  - [Saldırı Modelleri](#saldırı-modelleri)
+    - [Ciphertext only](#ciphertext-only)
+    - [Known plaintext](#known-plaintext)
+    - [Choosen plaintext](#choosen-plaintext)
+    - [Choosen ciphertext](#choosen-ciphertext)
+  - [Simetrik ve Asimetrik Şifreleme](#simetrik-ve-asimetrik-şifreleme)
+  - [Bilgi Güvenliği Koşulları](#bilgi-güvenliği-koşulları)
+    - [Confidentiality (Gizlilik)](#confidentiality-gizlilik)
+    - [Data Integrity (Veri bütünlüğü)](#data-integrity-veri-bütünlüğü)
+    - [Authentication (Kimlik Doğrulama)](#authentication-kimlik-doğrulama)
+    - [Non-repudiation (İnkar edilemezlik)](#non-repudiation-i̇nkar-edilemezlik)
+  - [Kriptografik Uygulamalar](#kriptografik-uygulamalar)
+    - [Digital Signatures (Dijital İmza)](#digital-signatures-dijital-i̇mza)
+    - [Identification (Kimlik Saptama)](#identification-kimlik-saptama)
+    - [Key Establishment (Anahtar Yönetimi)](#key-establishment-anahtar-yönetimi)
+    - [Secret Sharing (Gizli Paylaşım)](#secret-sharing-gizli-paylaşım)
+    - [Security Protocols (Güvenlik Protokolleri)](#security-protocols-güvenlik-protokolleri)
 
 # Giriş
 Bu döküman **Linux** işletim sisteminin **Kali Linux** dağıtımı üzerinde hazırlanmıştır. İlgili sistem bilgileri aşağıda bulunmaktadır.<br>
@@ -1444,3 +1467,129 @@ Biz bu koda **Mantıksal SQL Kodu** eklersek aslında SQL Injection yapmış ola
 ### SQL Injection Post Metodu
 Password kısmına `1' OR 1=1#` ve username kısmına `admin` yazacağız. Başarılı bir şekilde giriş yapabileceğiz. Bu kod parçacığı bunun arkada şu şekilde işlenmesini sağlayacak -> `SELECT * FROM accounts WHERE username='admin' AND password='1' OR 1=1#'`<br>
 `OR 1=1` kod parçacığı mantıksal olarak True döndüreceğinden başarılı bir şekilde giriş yapabileceğiz. 
+
+
+
+# Kriptolojiye Giriş
+## Kriptoloji Nedir?
+Kelime anlamı **Gizli Dünya** anlamına gelmektedir. 
+<br>
+Kavramsal olarak kriptoloji; haberleşen 2 veya daha 
+fazla tarafın bilgi alış-verişini emniyetli bir 
+şekilde yapmasını sağlayan, temeli matematiksel 
+problemlere dayanan teknik ve uygulamaların bütünüdür.
+<br>
+Kriptoloji; kriptografi ve kriptoanaliz olarak 2'ye 
+ayrılmaktadır.
+- Kriptografi; bir verinin şifrelenmesi ve şifresinin 
+çözülmesi için kullanılan yöntemlerdir. <br>
+- Kriptoanaliz; kriptografik sistemlerin kurduğu 
+mekanizmaları inceleyen ve bunları çözmeye çalışan, 
+kriptografinin zayıf ve güçlü yönlerini ortaya 
+çıkarmaktır.
+## Temel Şifreleme Modeli
+Bir iletişimde temelde 2 taraf vardır; gönderen 
+(sender) ve alıcı (receiver / recipient). <br>
+1. Sender'dan bir veri (plaintext) recipient'a doğru 
+yola çıkar
+2. Yola çıkan plaintext şifreleme makinesi tarafından 
+encrypt edilir 
+3. Plaintext'in encrypt edilmesi sonucu bir ciphertext 
+oluşur ve **recipient'a key (anahtar) ile birlikte 
+gönderilir**
+4. Recipient tarafında ise **key sayesinde ciphertext 
+decrypt** edilir ve plaintext'e ulaşılır
+
+![basic encryption model](./assets/1.webp)
+### Plaintext
+Kriptolojide, genellikle şifreleme algoritmalarına 
+giriş bekleyen şifrelenmemiş veri anlamına gelir.
+### Ciphertext
+Kriptolojide encryption algoritması kullanarak 
+plaintext üzerinde gerçekleştirilen encryption'ın 
+sonucudur.
+### Kerckhoff Prensibi (1883)
+Encryption ve decryption için kullanılacak 
+algoritmanın güvenilirliği (gizliliği) ile iletişimin 
+güvenilirliği bağlantılı değildir. Güvenlik; 
+algoritmanın gizli kalması değil anahtarın gizli 
+kalmasıdır. Yani bir iletişimde her şey bilinecek 
+(hangi algoritma vs.) fakat **anahtar (key) hariç**.
+## Saldırı Modelleri
+Saldırgan;
+- Şifreli veriyi elde edebilir (sniffing)
+- Şifreli veriyi değiştirebilir ve yeni veriyi alıcı
+(receiver)'ya gönderebilir
+- İletişime geçen iki kişi arasına girerek (MITM) 
+saldırabilir
+
+### Ciphertext only
+Saldırgan sadece Ciphertext'in bir kopyasına sahiptir
+### Known plaintext
+Saldırgan ciphertext'in kopyasına sahipken ilgili 
+ciphertext'in plaintext'ine de sahiptir
+### Choosen plaintext
+Saldırgan şifreleme makinesine (encryption machine) 
+kısa süreli de olsa erişime sahiptir. Plaintext'i 
+kendisi seçer ve oluşacak ciphertext'i bilecektir
+### Choosen ciphertext
+Saldırgan şifre çözme makinesine (decryption machine) 
+kısa süreli de olsa erişime sahiptir. Gelen 
+ciphertext'ten elde edilecek plaintext'i 
+bilebilecektir.
+## Simetrik ve Asimetrik Şifreleme
+- Simetrik Şifreleme
+  - Sender ve Recipient arasındaki iletişimde 
+Sender'ın encryption için kullandığı key (anahtar) 
+Recipient tarafında decryption için kullanılan key 
+(anahtar) ile **aynıdır**. Biraz daha hızlıdır.
+- Asimetrik Şifreleme
+  - Sender veriyi Recipient'ın public key'i (açık 
+anahtar) ile encrypt eder ve gönderir. Recipient ise 
+ciphertext kendisine ulaştığında, sadece **kendisine 
+özel olan private key** (özel anahtar) ile decrypt 
+eder ve plaintext'e ulaşır.
+
+![cryptology tree](./assets/2.ppm)
+
+## Bilgi Güvenliği Koşulları
+### Confidentiality (Gizlilik)
+Sender ve Recipient arasında gidip gelen veriyi 
+saldırgan (attacker) okuyamamalıdır.
+### Data Integrity (Veri bütünlüğü)
+Sender'dan çıkan veri recipient'a ulaştığında ilk 
+çıktığı andaki bütünlüğe sahip olması gerekmektedir
+### Authentication (Kimlik Doğrulama)
+Sender'dan çıkan veri acaba doğru recipient'a mı 
+gitti? 2 tip authentication vardır.
+- 1 -) Entity Authentication (Varlık)
+- 2 -) Data-origin Authentication (Verinin Kaynağı)
+### Non-repudiation (İnkar edilemezlik)
+Sender veriyi gönderdikten sonra, veriyi 
+göndermediğini iddaa edememelidir. Yani gönderdiğini 
+inkar etmemelidir.
+
+## Kriptografik Uygulamalar
+### Digital Signatures (Dijital İmza)
+Elektronik imzanın en gelişmiş ve güvenilir biçimidir. 
+Dijital imza; her imzalayanın kimliği ve imzalanan 
+belgenin doğruluğu ile en  yüksek güvenceyi sağlar.
+### Identification (Kimlik Saptama)
+Kimlik saptama anlamına gelir. Authenticate olduğumuz 
+sistemin kimliğimizi sisteme ispatlamasıdır.
+### Key Establishment (Anahtar Yönetimi)
+Sender ve recipient arasında kriptografik anahtarların 
+değişimidir. İki taraf arasında değiş tokuş edilir ve 
+bu sayede kriptografik algoritma kullanılabilir.
+### Secret Sharing (Gizli Paylaşım)
+Bir sırrı, kendisi ile paydaş olan grubun üyelerine 
+dağıtılması yöntemidir. Sır yalnızca yeterli grup 
+üyesinin bir araya gelmesi (muhtemelen farklı türde 
+roller) ile ortaya çıkabilecektir. Tek başına hiç bir 
+grup üyesinin etkisi yoktur.
+
+![secret sharing](./assets/3.png)
+
+### Security Protocols (Güvenlik Protokolleri)
+İnternet dünyasında kullandığımız protokollerdir. Bu 
+protokollerin başında SSL gelmektedir.
